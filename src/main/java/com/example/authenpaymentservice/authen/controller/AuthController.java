@@ -1,12 +1,17 @@
 package com.example.authenpaymentservice.authen.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.authenpaymentservice.authen.dtos.UserDTO;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1")
-public class AuthController {
+public class AuthController extends BaseController {
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserDTO userDTO) {
+        return authService.login(userDTO);
+    }
 
     @GetMapping
     public String helloWorld() {

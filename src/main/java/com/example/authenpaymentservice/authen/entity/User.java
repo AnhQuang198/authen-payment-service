@@ -32,7 +32,7 @@ public class User {
 
     @Column(name = "role")
     @Enumerated(value = EnumType.STRING)
-    private UserRole role = UserRole.USER;
+    private UserRole role = UserRole.MEMBER;
 
     @Column(name = "confirmed_at")
     private LocalDateTime confirmedAt;
