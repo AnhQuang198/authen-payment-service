@@ -3,6 +3,7 @@ package com.example.authenpaymentservice.authen.security.jwt;
 import com.example.authenpaymentservice.authen.service.AuthService;
 import com.example.authenpaymentservice.exception.BadRequestException;
 import com.example.authenpaymentservice.exception.Message;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
+@Log4j2
 public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     private AuthService authService;
@@ -40,6 +42,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         }catch (Exception e){
+            log.error("JWT Error {}", e);
             throw new BadRequestException(Message.NOT_FOUND);
         }
         filterChain.doFilter(request, response);
