@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class JwtTokenProvider {
@@ -36,7 +37,7 @@ public class JwtTokenProvider {
     }
 
     private String doGenerateRefreshToken(int userId, String userRole) {
-        return "random string " + userRole + " " + userId;
+        return String.format("%s-%s-%s", UUID.randomUUID(), userId, userRole);
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {

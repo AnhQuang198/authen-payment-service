@@ -34,6 +34,9 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRole role = UserRole.MEMBER;
 
+    @Column(name = "is_locked")
+    private boolean isLocked;
+
     @Column(name = "confirmed_at")
     private LocalDateTime confirmedAt;
 

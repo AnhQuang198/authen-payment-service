@@ -3,6 +3,8 @@ package com.example.authenpaymentservice.authen.security.jwt;
 import com.example.authenpaymentservice.authen.service.AuthService;
 import com.example.authenpaymentservice.exception.BadRequestException;
 import com.example.authenpaymentservice.exception.Message;
+import com.example.authenpaymentservice.exception.UnauthorizedException;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +44,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         }catch (Exception e){
+            if (e instanceof ExpiredJwtException) {
+                throw new UnauthorizedException(Message.JWT_EXPIRED);
+            }
             log.error("JWT Error {}", e);
             throw new BadRequestException(Message.NOT_FOUND);
         }
