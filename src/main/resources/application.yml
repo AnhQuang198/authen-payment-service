@@ -8,6 +8,16 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_ID}
+            clientSecret: ${GOOGLE_SECRET_CODE}
+            scope:
+              - email
+              - profile
 server:
   port: ${PORT}
 jwt:

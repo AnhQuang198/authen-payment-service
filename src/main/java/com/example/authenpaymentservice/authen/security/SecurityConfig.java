@@ -54,10 +54,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/v1/auth/register", "/v1/auth/login", "/v1/auth/forgot-password", "/v1/auth/verify-otp", "/v1/auth/send-otp")
+                .antMatchers("/v1/auth/register", "/v1/auth/login", "/v1/auth/forgot-password", "/v1/auth/verify-otp", "/v1/auth/send-otp", "/oauth/**")
                 .permitAll()
                 .antMatchers("/v1/**")
                 .authenticated();
+//                .and()
+//                .oauth2Login()
+//                .authorizationEndpoint().baseUri("/oauth2/authorize")
+//                .and()
+//                .redirectionEndpoint("/oauth2/callback/*")
+//                .and().oauth2Login()
         //request di vao phai qua lop jwtAuthFilter truoc
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
     }

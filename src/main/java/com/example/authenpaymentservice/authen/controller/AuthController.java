@@ -34,10 +34,5 @@ public class AuthController extends BaseController {
         return null;
     }
 
-//    @PostMapping("/logout")
-//    public ResponseEntity<?> logout() {
-//        return null;
-//    }
-
 
 }
