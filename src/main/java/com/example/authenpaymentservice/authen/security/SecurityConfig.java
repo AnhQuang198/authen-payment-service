@@ -1,6 +1,7 @@
 package com.example.authenpaymentservice.authen.security;
 
 import com.example.authenpaymentservice.authen.security.jwt.JwtAuthFilter;
+import com.example.authenpaymentservice.authen.security.oauth2.CustomOAuth2UserService;
 import com.example.authenpaymentservice.authen.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired private AuthService authService;
+    @Autowired private CustomOAuth2UserService oAuth2UserService;
 
     @Bean
     public JwtAuthFilter jwtAuthFilter() {
@@ -46,24 +48,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors()
                 .and()
-                .csrf()
-                .disable()
+                    .csrf().disable()
+                    .formLogin().disable()
+                    .httpBasic().disable()
                 .exceptionHandling()
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
-                .antMatchers("/v1/auth/register", "/v1/auth/login", "/v1/auth/forgot-password", "/v1/auth/verify-otp", "/v1/auth/send-otp", "/oauth/**")
-                .permitAll()
+                    .authorizeRequests()
+                        .antMatchers("/v1/auth/register", "/v1/auth/login", "/v1/auth/forgot-password", "/v1/auth/verify-otp", "/v1/auth/send-otp", "/oauth/**")
+                    .permitAll()
                 .antMatchers("/v1/**")
-                .authenticated();
-//                .and()
-//                .oauth2Login()
-//                .authorizationEndpoint().baseUri("/oauth2/authorize")
-//                .and()
-//                .redirectionEndpoint("/oauth2/callback/*")
-//                .and().oauth2Login()
+                .authenticated()
+                .and()
+                    .oauth2Login()
+                    .authorizationEndpoint()
+                        .baseUri("/oauth2/authorize")
+                .and()
+                    .redirectionEndpoint()
+                        .baseUri("/oauth2/callback/*")
+                .and()
+                    .userInfoEndpoint()
+                    .userService(oAuth2UserService);
         //request di vao phai qua lop jwtAuthFilter truoc
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
     }
