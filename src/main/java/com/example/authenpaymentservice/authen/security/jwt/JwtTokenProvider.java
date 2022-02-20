@@ -1,12 +1,15 @@
 package com.example.authenpaymentservice.authen.security.jwt;
 
+import com.example.authenpaymentservice.authen.entity.User;
 import com.example.authenpaymentservice.authen.enums.UserRole;
 import com.example.authenpaymentservice.authen.enums.UserState;
+import com.example.authenpaymentservice.authen.model.CustomUserDetails;
 import com.example.authenpaymentservice.authen.model.TokenInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -24,6 +27,21 @@ public class JwtTokenProvider {
 
     @Value("${jwt.refresh-expire-time}")
     private int refreshExpireTime;
+
+    public String generateOAuth2Token(Authentication authentication) {
+        CustomUserDetails userPrincipal = (CustomUserDetails) authentication.getPrincipal();
+        User user = userPrincipal.getUser();
+
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + tokenExpireTime);
+
+        return Jwts.builder()
+                .setSubject(Long.toString(user.getId()))
+                .setIssuedAt(new Date())
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
+    }
 
     public String generateToken(TokenInfo tokenInfo) {
         Map<String, Object> claims = new HashMap<>();

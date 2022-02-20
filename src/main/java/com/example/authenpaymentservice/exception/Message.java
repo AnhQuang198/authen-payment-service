@@ -1,6 +1,7 @@
 package com.example.authenpaymentservice.exception;
 
 public class Message {
+    private Message(){}
     public static final String NOT_FOUND = "Có lỗi xảy ra!";
     public static final String PASSWORD_INVALID = "Tài khoản hoặc mật khẩu không chính xác!";
     public static final String WRONG_FORMAT = "Sai định dạng tài khoản!";

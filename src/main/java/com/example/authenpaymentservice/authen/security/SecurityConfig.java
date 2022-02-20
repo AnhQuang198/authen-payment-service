@@ -2,6 +2,8 @@ package com.example.authenpaymentservice.authen.security;
 
 import com.example.authenpaymentservice.authen.security.jwt.JwtAuthFilter;
 import com.example.authenpaymentservice.authen.security.oauth2.CustomOAuth2UserService;
+import com.example.authenpaymentservice.authen.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
+import com.example.authenpaymentservice.authen.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import com.example.authenpaymentservice.authen.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired private AuthService authService;
     @Autowired private CustomOAuth2UserService oAuth2UserService;
+    @Autowired private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    @Autowired private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     @Bean
     public JwtAuthFilter jwtAuthFilter() {
@@ -70,7 +74,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .baseUri("/oauth2/callback/*")
                 .and()
                     .userInfoEndpoint()
-                    .userService(oAuth2UserService);
+                    .userService(oAuth2UserService)
+                .and()
+                    .successHandler(oAuth2AuthenticationSuccessHandler)
+                    .failureHandler(oAuth2AuthenticationFailureHandler);
         //request di vao phai qua lop jwtAuthFilter truoc
         http.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
     }
