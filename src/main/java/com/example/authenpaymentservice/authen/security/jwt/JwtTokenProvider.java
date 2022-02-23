@@ -31,16 +31,8 @@ public class JwtTokenProvider {
     public String generateOAuth2Token(Authentication authentication) {
         CustomUserDetails userPrincipal = (CustomUserDetails) authentication.getPrincipal();
         User user = userPrincipal.getUser();
-
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + tokenExpireTime);
-
-        return Jwts.builder()
-                .setSubject(Long.toString(user.getId()))
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, secretKey)
-                .compact();
+        TokenInfo tokenInfo = new TokenInfo(user.getId(), user.getRole(), user.getState());
+        return generateToken(tokenInfo);
     }
 
     public String generateToken(TokenInfo tokenInfo) {
