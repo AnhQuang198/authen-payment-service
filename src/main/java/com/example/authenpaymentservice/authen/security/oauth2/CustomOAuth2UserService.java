@@ -9,6 +9,7 @@ import com.example.authenpaymentservice.authen.security.oauth2.user.OAuth2UserIn
 import com.example.authenpaymentservice.authen.security.oauth2.user.OAuth2UserInfoFactory;
 import com.example.authenpaymentservice.exception.Message;
 import com.example.authenpaymentservice.exception.OAuth2AuthenticationProcessingException;
+import com.example.authenpaymentservice.exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -45,6 +46,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         User user = userRepository.findUserByEmail(oAuth2UserInfo.getEmail());
         if (Objects.nonNull(user)) {
+            if (user.isLocked()) {
+                throw new UnauthorizedException(Message.ACCOUNT_LOCKED);
+            }
             user = user;
         } else {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);

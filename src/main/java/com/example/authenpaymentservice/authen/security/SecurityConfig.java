@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin().disable()
                     .httpBasic().disable()
                 .exceptionHandling()
+                    .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
