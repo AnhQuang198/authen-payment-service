@@ -3,13 +3,11 @@ package com.example.authenpaymentservice.authen.security.jwt;
 import com.example.authenpaymentservice.authen.entity.User;
 import com.example.authenpaymentservice.authen.enums.UserRole;
 import com.example.authenpaymentservice.authen.enums.UserState;
-import com.example.authenpaymentservice.authen.model.CustomUserDetails;
 import com.example.authenpaymentservice.authen.model.TokenInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -28,22 +26,15 @@ public class JwtTokenProvider {
     @Value("${jwt.refresh-expire-time}")
     private int refreshExpireTime;
 
-    public String generateOAuth2Token(Authentication authentication) {
-        CustomUserDetails userPrincipal = (CustomUserDetails) authentication.getPrincipal();
-        User user = userPrincipal.getUser();
-        TokenInfo tokenInfo = new TokenInfo(user.getId(), user.getRole(), user.getState());
-        return generateToken(tokenInfo);
-    }
-
-    public String generateToken(TokenInfo tokenInfo) {
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userRole", tokenInfo.getRole().toString());
-        claims.put("userState", tokenInfo.getState().toString());
-        return doGenerateToken(claims, tokenInfo.getUserId().toString());
+        claims.put("userRole", String.valueOf(user.getRole()));
+        claims.put("userState", String.valueOf(user.getState()));
+        return doGenerateToken(claims, String.valueOf(user.getId()));
     }
 
-    public String generateRefreshToken(TokenInfo tokenInfo) {
-        return doGenerateRefreshToken(tokenInfo.getUserId(), tokenInfo.getRole().toString());
+    public String generateRefreshToken(User user) {
+        return doGenerateRefreshToken(user.getId(), user.getRole().toString());
     }
 
     private String doGenerateRefreshToken(int userId, String userRole) {

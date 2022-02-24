@@ -1,8 +1,10 @@
 package com.example.authenpaymentservice.authen.controller;
 
 import com.example.authenpaymentservice.authen.service.AuthService;
+import com.example.authenpaymentservice.authen.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class BaseController {
     @Autowired protected AuthService authService;
+    @Autowired protected UserService userService;
 }

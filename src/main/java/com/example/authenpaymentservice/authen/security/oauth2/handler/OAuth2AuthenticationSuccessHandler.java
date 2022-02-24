@@ -1,6 +1,8 @@
 package com.example.authenpaymentservice.authen.security.oauth2.handler;
 
+import com.example.authenpaymentservice.authen.entity.User;
 import com.example.authenpaymentservice.authen.security.jwt.JwtTokenProvider;
+import com.example.authenpaymentservice.authen.utils.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -22,7 +24,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String token = tokenProvider.generateOAuth2Token(authentication);
+        User user = UserData.getCurrentUserLogin(authentication);
+        String token = tokenProvider.generateToken(user);
 
         targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)

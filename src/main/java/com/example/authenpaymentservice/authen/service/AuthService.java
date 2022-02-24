@@ -2,12 +2,12 @@ package com.example.authenpaymentservice.authen.service;
 
 import com.example.authenpaymentservice.authen.dtos.LoginDTO;
 import com.example.authenpaymentservice.authen.dtos.RegisterDTO;
+import com.example.authenpaymentservice.authen.entity.User;
 import com.example.authenpaymentservice.authen.enums.AuthProvider;
 import com.example.authenpaymentservice.authen.enums.UserRole;
-import com.example.authenpaymentservice.authen.entity.User;
 import com.example.authenpaymentservice.authen.model.CustomUserDetails;
-import com.example.authenpaymentservice.authen.model.TokenInfo;
 import com.example.authenpaymentservice.authen.response.LoginResponse;
+import com.example.authenpaymentservice.authen.utils.UserData;
 import com.example.authenpaymentservice.exception.BadRequestException;
 import com.example.authenpaymentservice.exception.Message;
 import com.example.authenpaymentservice.exception.UnauthorizedException;
@@ -50,11 +50,9 @@ public class AuthService extends BaseService implements UserDetailsService {
               new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
       SecurityContextHolder.getContext().setAuthentication(authentication);
       // get user in authentication principal
-      CustomUserDetails customUser = (CustomUserDetails) authentication.getPrincipal();
-      User user = customUser.getUser();
-      TokenInfo tokenInfo = new TokenInfo(user.getId(), user.getRole(), user.getState());
-      String token = jwtTokenProvider.generateToken(tokenInfo);
-      String refreshToken = jwtTokenProvider.generateRefreshToken(tokenInfo);
+      User user = UserData.getCurrentUserLogin(authentication);
+      String token = jwtTokenProvider.generateToken(user);
+      String refreshToken = jwtTokenProvider.generateRefreshToken(user);
       response = new LoginResponse(token, refreshToken, "x-auth-token");
     } catch (DisabledException ex) {
       throw new UnauthorizedException(Message.ACCOUNT_NON_ACTIVE);
