@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,10 +26,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         User user = UserData.getCurrentUserLogin(authentication);
         String token = tokenProvider.generateToken(user);
 
-        targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("token", token)
-                .build().toUriString();
+        StringBuilder requestUrl = new StringBuilder(targetUrl);
+        requestUrl.append("?token=").append(token);
 
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        String url = String.valueOf(requestUrl);
+        getRedirectStrategy().sendRedirect(request, response, url);
     }
 }
