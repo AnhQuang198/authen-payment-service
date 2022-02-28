@@ -7,5 +7,5 @@ public class UpdateProfileDTO {
     private String name;
     private String dob;
     private String avatarUri;
-    private String coverUri;
+    private Boolean gender;
 }
