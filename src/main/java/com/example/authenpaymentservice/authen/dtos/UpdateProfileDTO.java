@@ -6,6 +6,7 @@ import lombok.Data;
 public class UpdateProfileDTO {
     private String name;
     private String dob;
-    private String avatarUri;
+    private String avatarUrl;
+    private String coverUrl;
     private Boolean gender;
 }

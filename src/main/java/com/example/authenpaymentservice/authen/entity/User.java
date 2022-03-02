@@ -47,6 +47,21 @@ public class User implements Serializable {
     @Column(name = "is_locked")
     private boolean isLocked;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "gender")
+    private Boolean gender;
+
+    @Column(name = "dob")
+    private String dob;
+
+    @Column(name = "avatar_url")
+    private String avatarUrl;
+
+    @Column(name = "cover_url")
+    private String coverUrl;
+
     @Column(name = "confirmed_at")
     private LocalDateTime confirmedAt;
 

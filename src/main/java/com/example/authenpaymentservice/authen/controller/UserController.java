@@ -10,15 +10,19 @@ import org.springframework.web.bind.annotation.*;
 public class UserController extends BaseController{
 
     @GetMapping("/me")
-    public ResponseEntity<?> getUser(@RequestHeader("x-user-id") Integer userId) {
+    public ResponseEntity<?> getUser(
+            @RequestHeader("x-auth-token") String token
+    ) {
+        int userId = tokenProvider.getUserIdFromJWT(token);
         return userService.getUser(userId);
     }
 
     @PostMapping("/update")
     public ResponseEntity<?> updateProfile(
-            @RequestHeader("x-user-id") Integer userId,
+            @RequestHeader("x-auth-token") String token,
             @RequestBody UpdateProfileDTO dto
             ) {
+        int userId = tokenProvider.getUserIdFromJWT(token);
         return userService.updateProfile(dto, userId);
     }
 

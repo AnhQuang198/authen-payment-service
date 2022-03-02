@@ -49,7 +49,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             if (user.isLocked()) {
                 throw new UnauthorizedException(Message.ACCOUNT_LOCKED);
             }
-            user = user;
+            user = updateExistingUser(user, oAuth2UserInfo);
         } else {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
@@ -61,10 +61,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setState(UserState.ACTIVE);
         user.setAuthProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()));
         user.setEmail(oAuth2UserInfo.getEmail());
+        user.setName(oAuth2UserInfo.getName());
+        user.setAvatarUrl(oAuth2UserInfo.getImageUrl());
         return userRepository.save(user);
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
+        existingUser.setAvatarUrl(oAuth2UserInfo.getImageUrl());
+        existingUser.setName(oAuth2UserInfo.getName());
         return userRepository.save(existingUser);
     }
 }

@@ -10,4 +10,5 @@ public class Message {
     public static final String ACCOUNT_LOCKED = "Tài khoản của bạn đã bị khoá!";
     public static final String JWT_EXPIRED = "Tài khoản đã hết hạn đăng nhập. Vui lòng đăng nhập lại!";
     public static final String OAUTH2_EMAIL_NOT_FOUND = "Email not found from OAuth2 provider";
+
 }

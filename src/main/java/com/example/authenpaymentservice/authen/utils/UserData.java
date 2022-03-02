@@ -11,4 +11,5 @@ public class UserData {
         CustomUserDetails customUser = (CustomUserDetails) authentication.getPrincipal();
         return customUser.getUser();
     }
+
 }
