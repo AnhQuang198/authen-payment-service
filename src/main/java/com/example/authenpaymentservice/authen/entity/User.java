@@ -59,9 +59,6 @@ public class User implements Serializable {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
-    @Column(name = "cover_url")
-    private String coverUrl;
-
     @Column(name = "confirmed_at")
     private LocalDateTime confirmedAt;
 

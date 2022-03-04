@@ -27,7 +27,6 @@ public class UserService extends BaseService{
         }
         user.setName(dto.getName());
         user.setAvatarUrl(dto.getAvatarUrl());
-        user.setCoverUrl(dto.getCoverUrl());
         user.setDob(dto.getDob());
         user.setGender(dto.getGender());
         userRepository.save(user);
