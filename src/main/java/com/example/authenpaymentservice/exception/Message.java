@@ -12,6 +12,8 @@ public class Message {
     public static final String OAUTH2_EMAIL_NOT_FOUND = "Email not found from OAuth2 provider";
     public static final String FILE_EXTENSION_INVALID = "Định dạng file không đúng!";
 
+    public static final String NO_ACCESS_RESOURCE = "Tài khoản không có quyền truy cập!";
+
     //shop message
     public static final String SHOP_EXISTED = "Shop đã tồn tại!";
 

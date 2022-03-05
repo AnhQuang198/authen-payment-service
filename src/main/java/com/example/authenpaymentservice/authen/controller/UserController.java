@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/user")
+@RequestMapping("/v1/users")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController extends BaseController{
 
@@ -17,7 +17,7 @@ public class UserController extends BaseController{
         return userService.getUser(userId);
     }
 
-    @PostMapping("/update")
+    @PutMapping
     public ResponseEntity<?> updateProfile(
             @RequestHeader("x-auth-token") String token,
             @RequestBody UpdateProfileRequest request
