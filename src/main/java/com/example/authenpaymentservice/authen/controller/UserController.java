@@ -1,6 +1,6 @@
 package com.example.authenpaymentservice.authen.controller;
 
-import com.example.authenpaymentservice.authen.dtos.UpdateProfileDTO;
+import com.example.authenpaymentservice.authen.model.request.UpdateProfileRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +20,10 @@ public class UserController extends BaseController{
     @PostMapping("/update")
     public ResponseEntity<?> updateProfile(
             @RequestHeader("x-auth-token") String token,
-            @RequestBody UpdateProfileDTO dto
+            @RequestBody UpdateProfileRequest request
             ) {
         int userId = tokenProvider.getUserIdFromJWT(token);
-        return userService.updateProfile(dto, userId);
+        return userService.updateProfile(request, userId);
     }
 
 }

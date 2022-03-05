@@ -1,4 +1,4 @@
-package com.example.authenpaymentservice.shop.dtos;
+package com.example.authenpaymentservice.authen.model.request;
 
 import lombok.Data;
 
@@ -6,16 +6,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
-public class ShopCreateDTO {
+public class RegisterRequest {
     @NotNull
     @Size(min = 6, max = 50)
     private String name;
 
     @NotNull
-    private String avatarUrl;
+    @Size(min = 6, max = 50)
+    private String email;
 
     @NotNull
-    private String coverUrl;
-
-    private String description;
+    @Size(min = 6, max = 50)
+    private String password;
 }

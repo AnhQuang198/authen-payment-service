@@ -1,11 +1,11 @@
 package com.example.authenpaymentservice.shop.service;
 
-import com.example.authenpaymentservice.authen.entity.User;
+import com.example.authenpaymentservice.authen.dtos.UserStatusDTO;
 import com.example.authenpaymentservice.authen.enums.UserState;
 import com.example.authenpaymentservice.authen.repository.UserRepository;
 import com.example.authenpaymentservice.exception.Message;
 import com.example.authenpaymentservice.exception.ResourceNotFoundException;
-import com.example.authenpaymentservice.shop.entity.Shop;
+import com.example.authenpaymentservice.shop.dtos.ShopStatusDTO;
 import com.example.authenpaymentservice.shop.repository.ShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +16,7 @@ public class BaseService {
     @Autowired protected UserRepository userRepository;
 
     protected void checkUserState(int userId) {
-        User user = userRepository.getUserState(userId);
+        UserStatusDTO user = userRepository.getUserState(userId);
         if (Objects.nonNull(user)) {
             if (user.isLocked()) {
                 throw new ResourceNotFoundException(Message.ACCOUNT_LOCKED);
@@ -29,7 +29,7 @@ public class BaseService {
     }
 
     protected boolean checkShopExisted(int userId) {
-        Shop shop = shopRepository.getShopStatus(userId);
+        ShopStatusDTO shop = shopRepository.getShopStatus(userId);
         if (Objects.isNull(shop)) {
             return false;
         }

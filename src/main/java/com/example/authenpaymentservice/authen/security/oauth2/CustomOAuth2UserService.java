@@ -3,7 +3,7 @@ package com.example.authenpaymentservice.authen.security.oauth2;
 import com.example.authenpaymentservice.authen.entity.User;
 import com.example.authenpaymentservice.authen.enums.AuthProvider;
 import com.example.authenpaymentservice.authen.enums.UserState;
-import com.example.authenpaymentservice.authen.model.CustomUserDetails;
+import com.example.authenpaymentservice.authen.security.data.CustomUserDetails;
 import com.example.authenpaymentservice.authen.repository.UserRepository;
 import com.example.authenpaymentservice.authen.security.oauth2.user.OAuth2UserInfo;
 import com.example.authenpaymentservice.authen.security.oauth2.user.OAuth2UserInfoFactory;

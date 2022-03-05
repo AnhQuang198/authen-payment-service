@@ -1,9 +1,9 @@
-package com.example.authenpaymentservice.authen.dtos;
+package com.example.authenpaymentservice.authen.model.request;
 
 import lombok.Data;
 
 @Data
-public class UpdateProfileDTO {
+public class UpdateProfileRequest {
     private String name;
     private String dob;
     private String avatarUrl;

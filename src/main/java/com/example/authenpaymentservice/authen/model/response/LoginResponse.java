@@ -1,4 +1,4 @@
-package com.example.authenpaymentservice.authen.response;
+package com.example.authenpaymentservice.authen.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

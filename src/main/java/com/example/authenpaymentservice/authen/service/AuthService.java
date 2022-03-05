@@ -1,12 +1,12 @@
 package com.example.authenpaymentservice.authen.service;
 
-import com.example.authenpaymentservice.authen.dtos.LoginDTO;
-import com.example.authenpaymentservice.authen.dtos.RegisterDTO;
+import com.example.authenpaymentservice.authen.model.request.LoginRequest;
+import com.example.authenpaymentservice.authen.model.request.RegisterRequest;
 import com.example.authenpaymentservice.authen.entity.User;
 import com.example.authenpaymentservice.authen.enums.AuthProvider;
 import com.example.authenpaymentservice.authen.enums.UserRole;
-import com.example.authenpaymentservice.authen.model.CustomUserDetails;
-import com.example.authenpaymentservice.authen.response.LoginResponse;
+import com.example.authenpaymentservice.authen.security.data.CustomUserDetails;
+import com.example.authenpaymentservice.authen.model.response.LoginResponse;
 import com.example.authenpaymentservice.authen.utils.UserData;
 import com.example.authenpaymentservice.exception.BadRequestException;
 import com.example.authenpaymentservice.exception.Message;
@@ -32,22 +32,22 @@ import java.util.Objects;
 @Service
 public class AuthService extends BaseService implements UserDetailsService {
 
-  public ResponseEntity<?> register(RegisterDTO registerDTO) {
-    User user = userRepository.findUserByEmail(registerDTO.getEmail());
+  public ResponseEntity<?> register(RegisterRequest request) {
+    User user = userRepository.findUserByEmail(request.getEmail());
     if (Objects.nonNull(user)) {
       throw new BadRequestException(Message.USERNAME_EXITED);
     }
-    saveUser(registerDTO);
+    saveUser(request);
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
-  public ResponseEntity<?> login(LoginDTO loginDTO) {
+  public ResponseEntity<?> login(LoginRequest loginRequest) {
     LoginResponse response;
     try {
       // auth
       Authentication authentication =
           authenticationManager.authenticate(
-              new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+              new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
       SecurityContextHolder.getContext().setAuthentication(authentication);
       // get user in authentication principal
       User user = UserData.getCurrentUserLogin(authentication);
@@ -84,10 +84,10 @@ public class AuthService extends BaseService implements UserDetailsService {
     return new CustomUserDetails(user, authorities);
   }
 
-  private void saveUser(RegisterDTO registerDTO) {
+  private void saveUser(RegisterRequest request) {
     User user = new User();
-    String passwordEncrypt = encodePassword(registerDTO.getPassword());
-    user.setEmail(registerDTO.getEmail());
+    String passwordEncrypt = encodePassword(request.getPassword());
+    user.setEmail(request.getEmail());
     user.setPassword(passwordEncrypt);
     user.setAuthProvider(AuthProvider.LOCAL);
     userRepository.save(user);

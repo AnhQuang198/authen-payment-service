@@ -3,7 +3,7 @@ package com.example.authenpaymentservice.authen.security.jwt;
 import com.example.authenpaymentservice.authen.entity.User;
 import com.example.authenpaymentservice.authen.enums.UserRole;
 import com.example.authenpaymentservice.authen.enums.UserState;
-import com.example.authenpaymentservice.authen.model.TokenInfo;
+import com.example.authenpaymentservice.authen.security.data.TokenInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

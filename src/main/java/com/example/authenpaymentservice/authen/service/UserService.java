@@ -1,6 +1,6 @@
 package com.example.authenpaymentservice.authen.service;
 
-import com.example.authenpaymentservice.authen.dtos.UpdateProfileDTO;
+import com.example.authenpaymentservice.authen.model.request.UpdateProfileRequest;
 import com.example.authenpaymentservice.authen.entity.User;
 import com.example.authenpaymentservice.exception.Message;
 import com.example.authenpaymentservice.exception.ResourceNotFoundException;
@@ -20,15 +20,15 @@ public class UserService extends BaseService{
         return ResponseEntity.ok(user);
     }
 
-    public ResponseEntity<?> updateProfile(UpdateProfileDTO dto, Integer userId) {
+    public ResponseEntity<?> updateProfile(UpdateProfileRequest request, Integer userId) {
         User user = userRepository.findUserById(userId);
         if (Objects.isNull(user)) {
             throw new ResourceNotFoundException(Message.NOT_FOUND);
         }
-        user.setName(dto.getName());
-        user.setAvatarUrl(dto.getAvatarUrl());
-        user.setDob(dto.getDob());
-        user.setGender(dto.getGender());
+        user.setName(request.getName());
+        user.setAvatarUrl(request.getAvatarUrl());
+        user.setDob(request.getDob());
+        user.setGender(request.getGender());
         userRepository.save(user);
         return ResponseEntity.ok("Updated");
     }

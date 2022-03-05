@@ -1,7 +1,7 @@
 package com.example.authenpaymentservice.authen.utils;
 
 import com.example.authenpaymentservice.authen.entity.User;
-import com.example.authenpaymentservice.authen.model.CustomUserDetails;
+import com.example.authenpaymentservice.authen.security.data.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 
 public class UserData {

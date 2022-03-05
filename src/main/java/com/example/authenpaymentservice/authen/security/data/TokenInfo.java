@@ -1,4 +1,4 @@
-package com.example.authenpaymentservice.authen.model;
+package com.example.authenpaymentservice.authen.security.data;
 
 import com.example.authenpaymentservice.authen.enums.UserRole;
 import com.example.authenpaymentservice.authen.enums.UserState;
