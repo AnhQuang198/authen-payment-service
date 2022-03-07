@@ -49,7 +49,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(NoAccessException.class)
-    public ResponseEntity<?> noAccessException(UnauthorizedException ex, WebRequest request) {
+    public ResponseEntity<?> noAccessException(NoAccessException ex, WebRequest request) {
         ErrorDetails errorDetails =
                 new ErrorDetails(
                         HttpStatus.FORBIDDEN.value(),

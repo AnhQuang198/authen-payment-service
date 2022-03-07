@@ -5,8 +5,11 @@ import com.example.authenpaymentservice.authen.enums.UserState;
 import com.example.authenpaymentservice.authen.repository.UserRepository;
 import com.example.authenpaymentservice.exception.Message;
 import com.example.authenpaymentservice.exception.ResourceNotFoundException;
-import com.example.authenpaymentservice.shop.dtos.ShopStatusDTO;
+import com.example.authenpaymentservice.shop.entity.Shop;
+import com.example.authenpaymentservice.shop.repository.CityRepository;
+import com.example.authenpaymentservice.shop.repository.DistrictRepository;
 import com.example.authenpaymentservice.shop.repository.ShopRepository;
+import com.example.authenpaymentservice.shop.repository.WardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
@@ -14,6 +17,9 @@ import java.util.Objects;
 public class BaseService {
     @Autowired protected ShopRepository shopRepository;
     @Autowired protected UserRepository userRepository;
+    @Autowired protected CityRepository cityRepository;
+    @Autowired protected DistrictRepository districtRepository;
+    @Autowired protected WardRepository wardRepository;
 
     protected User checkUserState(int userId) {
         User user = userRepository.findUserById(userId);
@@ -30,7 +36,7 @@ public class BaseService {
     }
 
     protected boolean checkShopExisted(int userId) {
-        ShopStatusDTO shop = shopRepository.getShopStatus(userId);
+        Shop shop = shopRepository.findShopById(userId);
         if (Objects.isNull(shop)) {
             return false;
         }
