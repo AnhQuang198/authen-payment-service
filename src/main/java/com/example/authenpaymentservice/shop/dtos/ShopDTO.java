@@ -13,6 +13,7 @@ public class ShopDTO {
     private ShopState state;
     private Boolean isLocked;
     private User user;
+    private Address address;
     private LocalDateTime createdAt;
 
     public ShopDTO(Integer id, String shopName, String email, String phone, ShopState state, Boolean isLocked, LocalDateTime createdAt) {
@@ -29,6 +30,32 @@ public class ShopDTO {
     public class User {
         private String email;
         private String phone;
+    }
+
+    @Data
+    public class Address{
+        private City city;
+        private District district;
+        private Ward ward;
+        private String addDetail;
+    }
+
+    @Data
+    public class City {
+        private Integer id;
+        private String cityName;
+    }
+
+    @Data
+    public class District {
+        private Integer id;
+        private String districtName;
+    }
+
+    @Data
+    public class Ward {
+        private Integer id;
+        private String wardName;
     }
 
 }
