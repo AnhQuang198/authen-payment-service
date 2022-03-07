@@ -7,6 +7,7 @@ import com.example.authenpaymentservice.exception.NoAccessException;
 import com.example.authenpaymentservice.exception.ResourceNotFoundException;
 import com.example.authenpaymentservice.shop.dtos.ShopDTO;
 import com.example.authenpaymentservice.shop.entity.Shop;
+import com.example.authenpaymentservice.shop.entity.ShopAddress;
 import com.example.authenpaymentservice.shop.enums.ShopState;
 import com.example.authenpaymentservice.shop.model.request.ShopAddressRequest;
 import com.example.authenpaymentservice.shop.model.request.ShopCreateRequest;
@@ -70,11 +71,20 @@ public class ShopService extends BaseService {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    public ResponseEntity<?> addressProcess(int userId, ShopAddressRequest request) {
+    public ResponseEntity<?> addressProcess(int shopId, ShopAddressRequest request) {
+        checkShopExisted(shopId);
+        ShopAddress shopAddress = new ShopAddress();
         if (request.getType().equalsIgnoreCase("update")) {
             //get current address
+            shopAddress = shopAddressRepository.findByIdAndShopId(request.getId(), shopId);
         }
-        return null;
+        shopAddress.setShopId(shopId);
+        shopAddress.setCityId(request.getCityId());
+        shopAddress.setDistrictId(request.getDistrictId());
+        shopAddress.setWardId(request.getWardId());
+        shopAddress.setAddDetail(request.getAddDetail());
+        shopAddressRepository.save(shopAddress);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     private void updateUserRole(User user) {

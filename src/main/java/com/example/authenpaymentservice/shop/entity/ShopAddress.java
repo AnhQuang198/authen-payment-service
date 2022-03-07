@@ -22,7 +22,7 @@ public class ShopAddress {
     @Column(name = "city_id")
     private Integer cityId;
 
-    @Column(name = "distrct_id")
+    @Column(name = "district_id")
     private Integer districtId;
 
     @Column(name = "ward_id")

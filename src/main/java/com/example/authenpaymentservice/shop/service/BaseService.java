@@ -6,10 +6,7 @@ import com.example.authenpaymentservice.authen.repository.UserRepository;
 import com.example.authenpaymentservice.exception.Message;
 import com.example.authenpaymentservice.exception.ResourceNotFoundException;
 import com.example.authenpaymentservice.shop.entity.Shop;
-import com.example.authenpaymentservice.shop.repository.CityRepository;
-import com.example.authenpaymentservice.shop.repository.DistrictRepository;
-import com.example.authenpaymentservice.shop.repository.ShopRepository;
-import com.example.authenpaymentservice.shop.repository.WardRepository;
+import com.example.authenpaymentservice.shop.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
@@ -17,6 +14,7 @@ import java.util.Objects;
 public class BaseService {
     @Autowired protected ShopRepository shopRepository;
     @Autowired protected UserRepository userRepository;
+    @Autowired protected ShopAddressRepository shopAddressRepository;
     @Autowired protected CityRepository cityRepository;
     @Autowired protected DistrictRepository districtRepository;
     @Autowired protected WardRepository wardRepository;
@@ -37,7 +35,7 @@ public class BaseService {
 
     protected boolean checkShopExisted(int userId) {
         Shop shop = shopRepository.findShopById(userId);
-        if (Objects.isNull(shop)) {
+        if (Objects.isNull(shop) || shop.isLocked()) {
             return false;
         }
         return true;

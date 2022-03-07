@@ -44,8 +44,8 @@ public class ShopController extends BaseController{
             @RequestHeader("x-auth-token") String token,
             @RequestBody ShopAddressRequest request
     ) {
-        int userId = tokenProvider.getUserIdFromJWT(token);
-        return shopService.addressProcess(userId, request);
+        int shopId = tokenProvider.getUserIdFromJWT(token);
+        return shopService.addressProcess(shopId, request);
     }
 
     @PutMapping("/address")
