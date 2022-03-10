@@ -25,4 +25,5 @@
         S3_REGION=ap-southeast-1
 
 Guideline: https://docs.google.com/document/d/15hNd1mW0VrKpOeMaiIyV5ZkjqLEsR2E3f5Q0HAhgJqQ/edit?usp=sharing
+<br/>
 SQL file: https://drive.google.com/file/d/1fs-xNIG1Ga_LStJPBNIzXScB0aIdoZHR/view?usp=sharing
