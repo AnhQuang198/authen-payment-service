@@ -35,5 +35,12 @@ public class AuthController extends BaseController {
         return null;
     }
 
+    @PostMapping("/generate-token")
+    public ResponseEntity<?> generateToken(
+            @RequestHeader("x-refresh-token") String refreshToken
+    ) {
+        return authService.generateToken(refreshToken);
+    }
+
 
 }

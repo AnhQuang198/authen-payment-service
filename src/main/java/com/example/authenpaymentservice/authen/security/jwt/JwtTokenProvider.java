@@ -7,6 +7,7 @@ import com.example.authenpaymentservice.authen.security.data.TokenInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +21,13 @@ public class JwtTokenProvider {
     @Value("${jwt.secret-key}")
     private String secretKey;
 
+    @Getter
     @Value("${jwt.token-expire-time}")
-    private int tokenExpireTime;
+    private long tokenExpireTime;
 
+    @Getter
     @Value("${jwt.refresh-expire-time}")
-    private int refreshExpireTime;
+    private long refreshExpireTime;
 
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
@@ -43,8 +46,9 @@ public class JwtTokenProvider {
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + tokenExpireTime))
+        return Jwts.builder().setClaims(claims).setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis() + tokenExpireTime)) //milliseconds
+                .setExpiration(new Date(System.currentTimeMillis() + tokenExpireTime)) //milliseconds
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 

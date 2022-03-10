@@ -15,13 +15,15 @@ public interface ShopRepository extends JpaRepository<Shop, Integer> {
             "s.createdAt)" +
             " FROM Shop s " +
             "LEFT JOIN User u ON s.id = u.id " +
-            "WHERE s.state = ?1")
+            "LEFT JOIN ShopAddress a ON s.id = a.shopId" +
+            " WHERE s.state = ?1")
     Page<ShopDTO> getShops(ShopState shopState, Pageable pageable);
 
     @Query("SELECT new com.example.authenpaymentservice.shop.dtos.ShopDTO(s.id, s.name, u.email, u.phone, s.state, s.isLocked, " +
             "s.createdAt)" +
             " FROM Shop s " +
             "LEFT JOIN User u ON s.id = u.id " +
+            "LEFT JOIN ShopAddress a ON s.id = a.shopId " +
             "WHERE s.state = ?1 AND s.name LIKE ?2%")
     Page<ShopDTO> getShopsByName(ShopState shopState, String shopName, Pageable pageable);
 }

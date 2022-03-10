@@ -53,7 +53,7 @@ public class AuthService extends BaseService implements UserDetailsService {
       User user = UserData.getCurrentUserLogin(authentication);
       String token = jwtTokenProvider.generateToken(user);
       String refreshToken = jwtTokenProvider.generateRefreshToken(user);
-      response = new LoginResponse(token, refreshToken, "x-auth-token", null);
+      response = new LoginResponse(token, refreshToken, "x-auth-token", jwtTokenProvider.getTokenExpireTime());
     } catch (DisabledException ex) {
       throw new UnauthorizedException(Message.ACCOUNT_NON_ACTIVE);
     } catch (LockedException ex) {
@@ -62,6 +62,11 @@ public class AuthService extends BaseService implements UserDetailsService {
       throw new UnauthorizedException(Message.PASSWORD_INVALID);
     }
     return ResponseEntity.ok(response);
+  }
+
+  public ResponseEntity<?> generateToken(String refreshToken) {
+    //check refreshToken expired > generate new Token and
+    return null;
   }
 
   @Override

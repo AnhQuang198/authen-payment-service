@@ -16,7 +16,8 @@ public class ShopDTO {
     private Address address;
     private LocalDateTime createdAt;
 
-    public ShopDTO(Integer id, String shopName, String email, String phone, ShopState state, Boolean isLocked, LocalDateTime createdAt) {
+    public ShopDTO(Integer id, String shopName, String email, String phone, ShopState state,
+                   Boolean isLocked, LocalDateTime createdAt) {
         this.id = id;
         this.shopName = shopName;
         this.user = new User(email, phone);
