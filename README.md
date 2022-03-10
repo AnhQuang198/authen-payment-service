@@ -23,3 +23,5 @@
         S3_SECRET_KEY=2G10B+pO7fEJCd+PuM0rUrNM96r+k/4XNS3eI1Dc;
         S3_BUCKET_NAME=imgs-resource;
         S3_REGION=ap-southeast-1
+
+Guideline: https://docs.google.com/document/d/15hNd1mW0VrKpOeMaiIyV5ZkjqLEsR2E3f5Q0HAhgJqQ/edit?usp=sharing
