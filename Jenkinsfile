@@ -4,7 +4,7 @@ node {
     properties([disableConcurrentBuilds()])
 
     try {
-        project = "food-delivery"
+        project = "authen-payment-service"
         dockerRepo = "leequang198"
         dockerFile = "Dockerfile"
         imageName = "${dockerRepo}/${project}"

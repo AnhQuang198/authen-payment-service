@@ -53,7 +53,7 @@ public class AuthService extends BaseService implements UserDetailsService {
       User user = UserData.getCurrentUserLogin(authentication);
       String token = jwtTokenProvider.generateToken(user);
       String refreshToken = jwtTokenProvider.generateRefreshToken(user);
-      response = new LoginResponse(token, refreshToken, "x-auth-token");
+      response = new LoginResponse(token, refreshToken, "x-auth-token", null);
     } catch (DisabledException ex) {
       throw new UnauthorizedException(Message.ACCOUNT_NON_ACTIVE);
     } catch (LockedException ex) {

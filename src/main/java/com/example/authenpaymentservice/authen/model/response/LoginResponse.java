@@ -17,4 +17,6 @@ public class LoginResponse {
 
     @JsonProperty("token_type")
     private String tokenType;
+
+    private Long expired;
 }
