@@ -22,16 +22,18 @@ node {
         switch (env.BRANCH_NAME) {
             case 'develop':
                 stage('run-dev') {
-                    cd /home/server-dev-end/
-                    pwd
-                    echo "run images in develop env"
+                    sh """
+                        cd /home/server-dev-end/
+                        pwd
+                    """
                 }
                 break
             case 'master':
                 stage('run-prod') {
-                    cd /home/server-prod-end/
-                    echo "run images in master env"
-                    pwd
+                    sh """
+                        cd /home/server-prod-end/
+                        pwd
+                    """
                 }
                 break
         }
