@@ -20,8 +20,12 @@ node {
         switch (env.BRANCH_NAME) {
             case 'develop':
                 stage('run-dev') {
-                    sh '''
-                        cd home/server/dev
+                    sh script:'''
+                        #!/bin/bash
+                        cd /
+                        cd home
+                        cd server
+                        cd dev
                         echo "This is $(pwd)"
                     '''
                 }
