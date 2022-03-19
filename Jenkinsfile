@@ -22,6 +22,7 @@ node {
         switch (env.BRANCH_NAME) {
             case 'develop':
                 stage('run-dev') {
+                    sh "pwd"
                     echo "run images in develop env"
                 }
                 break
@@ -32,9 +33,9 @@ node {
                 break
         }
 
-        stage('push') {
-              sh "docker push ${imageName}:${env.BRANCH_NAME}-build-${buildNumber}"
-        }
+//        stage('push') {
+//              sh "docker push ${imageName}:${env.BRANCH_NAME}-build-${buildNumber}"
+//        }
 
     } catch (e) {
         currentBuild.result = "FAILED"
