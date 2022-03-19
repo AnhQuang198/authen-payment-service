@@ -24,6 +24,7 @@ node {
                         #!/bin/bash
                         cd /
                         cd home
+                        cd server-dev-env
                         echo "This is $(pwd)"
                     '''
                 }
