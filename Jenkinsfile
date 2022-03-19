@@ -24,7 +24,6 @@ node {
                         #!/bin/bash
                         echo "This is start $(pwd)"
                         cd /
-                        cd /home/server-prod-end/
                         echo "This is $(pwd)"
                     '''
                 }
