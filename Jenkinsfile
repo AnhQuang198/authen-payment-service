@@ -23,7 +23,7 @@ node {
                     sh script:'''
                         #!/bin/bash
                         cd /
-                        cd home/server-dev-end
+                        cd home
                         echo "This is $(pwd)"
                     '''
                 }
