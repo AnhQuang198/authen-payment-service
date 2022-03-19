@@ -22,20 +22,19 @@ node {
         switch (env.BRANCH_NAME) {
             case 'develop':
                 stage('run-dev') {
+                    sh "cd /home/server-dev-end/"
                     sh "pwd"
                     echo "run images in develop env"
                 }
                 break
             case 'master':
                 stage('run-prod') {
+                    sh "cd /home/server-prod-end/"
+                    sh "pwd"
                     echo "run images in master env"
                 }
                 break
         }
-
-//        stage('push') {
-//              sh "docker push ${imageName}:${env.BRANCH_NAME}-build-${buildNumber}"
-//        }
 
     } catch (e) {
         currentBuild.result = "FAILED"
