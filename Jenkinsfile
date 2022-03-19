@@ -41,6 +41,7 @@ node {
         }
 
         stage('run') {
+            sh "pwd"
             sh "docker-compose up -d"
             echo "Run success!"
         }
