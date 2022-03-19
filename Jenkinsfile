@@ -23,15 +23,15 @@ node {
             case 'develop':
                 stage('run-dev') {
                     cd /home/server-dev-end/
-                    sh "pwd"
+                    pwd
                     echo "run images in develop env"
                 }
                 break
             case 'master':
                 stage('run-prod') {
                     cd /home/server-prod-end/
-                    sh "pwd"
                     echo "run images in master env"
+                    pwd
                 }
                 break
         }
