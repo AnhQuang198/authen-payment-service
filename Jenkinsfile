@@ -26,6 +26,7 @@ node {
                         cd server
                         cd dev
                     '''
+                    sh "docker-compose up -d"
                 }
                 break
             case 'master':
@@ -36,14 +37,9 @@ node {
                         cd server
                         cd prod
                     '''
+                    sh "docker-compose up -d"
                 }
                 break
-        }
-
-        stage('run') {
-            sh "pwd"
-            sh "docker-compose up -d"
-            echo "Run success!"
         }
 
     } catch (e) {
