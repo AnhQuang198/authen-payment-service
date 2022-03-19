@@ -19,7 +19,7 @@ node {
 
         switch (env.BRANCH_NAME) {
             case 'develop':
-                stage('switch-env-dev') {
+                stage('run-dev') {
                     sh '''
                         cd /
                         cd home
@@ -30,7 +30,7 @@ node {
                 }
                 break
             case 'master':
-                stage('switch-env-prod') {
+                stage('run-prod') {
                     sh '''
                         cd /
                         cd home
