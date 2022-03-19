@@ -23,6 +23,11 @@ node {
             case 'develop':
                 stage('run-dev') {
                     steps {
+                        sh 'echo "Hello World"'
+                        sh '''
+                            echo "Multiline shell steps works too"
+                            ls lah
+                        '''
                         sh '''
                             cd /home/server-dev-end/
                             pwd
