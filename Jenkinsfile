@@ -22,8 +22,7 @@ node {
         switch (env.BRANCH_NAME) {
             case 'develop':
                 stage('run-dev') {
-                    sh """
-                        #!/bin/bash
+                    bat """
                         cd /home/server-dev-end/
                         pwd
                     """
@@ -31,8 +30,7 @@ node {
                 break
             case 'master':
                 stage('run-prod') {
-                    sh """
-                        #!/bin/bash
+                    bat """
                         cd /home/server-prod-end/
                         pwd
                     """
