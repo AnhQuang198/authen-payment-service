@@ -1,8 +1,6 @@
 #!/usr/bin/env groovy
 
 node {
-    properties([disableConcurrentBuilds()])
-
     try {
         project = "authen-payment-service"
         dockerRepo = "leequang198"
