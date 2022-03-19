@@ -20,9 +20,13 @@ node {
         switch (env.BRANCH_NAME) {
             case 'develop':
                 stage('run-dev') {
-                    dir("/home/server-prod-end/") {
-                        sh "pwd"
-                    }
+                    sh script:'''
+                        #!/bin/bash
+                        echo "This is start $(pwd)"
+                        mkdir hello
+                        cd ./hello
+                        echo "This is $(pwd)"
+                    '''
                 }
                 break
             case 'master':
