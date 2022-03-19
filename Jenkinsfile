@@ -23,8 +23,8 @@ node {
                     sh script:'''
                         #!/bin/bash
                         echo "This is start $(pwd)"
-                        mkdir hello
-                        cd ./hello
+                        cd /
+                        cd /home/server-prod-end/
                         echo "This is $(pwd)"
                     '''
                 }
