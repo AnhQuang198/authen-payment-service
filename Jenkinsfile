@@ -22,9 +22,8 @@ node {
                 stage('run-dev') {
                     sh script:'''
                         #!/bin/bash
-                        echo "This is start $(pwd)"
                         cd /
-                        ls
+                        cd ./home/server-dev-end
                         echo "This is $(pwd)"
                     '''
                 }
