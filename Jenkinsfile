@@ -16,7 +16,20 @@ node {
         }
 
         stage('build') {
-            sh "docker build -t ${imageName}:${env.BRANCH_NAME}-build-${buildNumber} -f ./Dockerfile ."
+            sh "docker build -t ${imageName}:${env.BRANCH_NAME}-build -f ./Dockerfile ."
+        }
+
+        switch (env.BRANCH_NAME) {
+            case 'develop':
+                stage('run-dev') {
+                    echo "run images in develop env"
+                }
+                break
+            case 'master':
+                stage('run-prod') {
+                    echo "run images in master env"
+                }
+                break
         }
 
         stage('push') {
