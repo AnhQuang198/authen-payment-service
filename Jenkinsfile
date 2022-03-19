@@ -24,6 +24,7 @@ node {
                         #!/bin/bash
                         echo "This is start $(pwd)"
                         cd /
+                        ls
                         echo "This is $(pwd)"
                     '''
                 }
