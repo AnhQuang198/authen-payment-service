@@ -20,13 +20,12 @@ node {
         switch (env.BRANCH_NAME) {
             case 'develop':
                 stage('run-dev') {
-                    sh script:'''
+                    sh '''
                         #!/bin/bash
                         cd /
                         cd home
                         cd server
                         cd dev
-                        echo "This is $(pwd)"
                     '''
                 }
                 break
@@ -34,8 +33,11 @@ node {
                 stage('run-prod') {
                     steps {
                         sh '''
-                            cd /home/server-prod-end/
-                            pwd
+                            #!/bin/bash
+                            cd /
+                            cd home
+                            cd server
+                            cd prod
                         '''
                     }
                 }
