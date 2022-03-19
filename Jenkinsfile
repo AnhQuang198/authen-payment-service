@@ -19,9 +19,8 @@ node {
 
         switch (env.BRANCH_NAME) {
             case 'develop':
-                stage('run-dev') {
+                stage('switch-env-dev') {
                     sh '''
-                        #!/bin/bash
                         cd /
                         cd home
                         cd server
@@ -30,18 +29,20 @@ node {
                 }
                 break
             case 'master':
-                stage('run-prod') {
-                    steps {
-                        sh '''
-                            #!/bin/bash
-                            cd /
-                            cd home
-                            cd server
-                            cd prod
-                        '''
-                    }
+                stage('switch-env-prod') {
+                    sh '''
+                        cd /
+                        cd home
+                        cd server
+                        cd prod
+                    '''
                 }
                 break
+        }
+
+        stage('run') {
+            sh "docker-compose up -d"
+            echo "Run success!"
         }
 
     } catch (e) {
