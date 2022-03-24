@@ -42,6 +42,10 @@ node {
                 break
         }
 
+        stage('clean') {
+            sh "docker image prune -a"
+        }
+
     } catch (e) {
         currentBuild.result = "FAILED"
         throw e
