@@ -76,8 +76,8 @@ public class AuthService extends BaseService implements UserDetailsService {
       throw new UsernameNotFoundException(email);
     }
     List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority(UserRole.MEMBER.toString()));
-    authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.toString()));
+    authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+//    authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.toString()));
     return new CustomUserDetails(user, authorities);
   }
 
