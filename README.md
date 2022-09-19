@@ -22,7 +22,11 @@
         S3_ACCESS_KEY=AKIARFNWHAI7XOMWA2NI;
         S3_SECRET_KEY=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;
         S3_BUCKET_NAME=imgs-resource;
-        S3_REGION=ap-southeast-1
+        S3_REGION=ap-southeast-1;
+        REDIS_HOST=127.0.0.1;
+        REDIS_PORT=6379;
+        JWT_OTP_EXPIRE_TIME=300000
+        
 
 Guideline: https://docs.google.com/document/d/15hNd1mW0VrKpOeMaiIyV5ZkjqLEsR2E3f5Q0HAhgJqQ/edit?usp=sharing
 <br/>
