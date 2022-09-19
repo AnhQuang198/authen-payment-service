@@ -1,11 +1,14 @@
 package com.example.authenpaymentservice.authen.security.jwt;
 
 import com.example.authenpaymentservice.authen.service.AuthService;
+import com.example.authenpaymentservice.authen.utils.JsonParser;
 import com.example.authenpaymentservice.exception.BadRequestException;
+import com.example.authenpaymentservice.exception.ErrorDetails;
 import com.example.authenpaymentservice.exception.Message;
 import com.example.authenpaymentservice.exception.UnauthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.log4j.Log4j2;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Objects;
 
 @Log4j2
@@ -43,14 +47,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
+            filterChain.doFilter(request, response);
         }catch (Exception e){
+            ErrorDetails errorDetails = new ErrorDetails();
             if (e instanceof ExpiredJwtException) {
-                throw new UnauthorizedException(Message.JWT_EXPIRED);
+                errorDetails.setMessage(Message.JWT_EXPIRED);
             }
+            errorDetails.setMessage(Message.NO_ACCESS_RESOURCE);
+            errorDetails.setStatusCode(HttpStatus.SC_UNAUTHORIZED);
+            errorDetails.setPath(request.getRequestURI());
+            errorDetails.setTimestamp(new Date());
             log.error("JWT Error {}", e);
-            throw new BadRequestException(Message.NOT_FOUND);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8");
+            response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+            response.getWriter().write(JsonParser.toJson(errorDetails));
         }
-        filterChain.doFilter(request, response);
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
