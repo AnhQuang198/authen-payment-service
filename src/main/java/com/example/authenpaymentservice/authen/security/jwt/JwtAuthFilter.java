@@ -2,10 +2,8 @@ package com.example.authenpaymentservice.authen.security.jwt;
 
 import com.example.authenpaymentservice.authen.service.AuthService;
 import com.example.authenpaymentservice.authen.utils.JsonParser;
-import com.example.authenpaymentservice.exception.BadRequestException;
 import com.example.authenpaymentservice.exception.ErrorDetails;
 import com.example.authenpaymentservice.exception.Message;
-import com.example.authenpaymentservice.exception.UnauthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.log4j.Log4j2;
 import org.apache.http.HttpStatus;
@@ -18,7 +16,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,13 +31,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtTokenProvider jwtTokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try{
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
+        try {
             String jwt = getJwtFromRequest(request);
             if (StringUtils.hasText(jwt) && Objects.nonNull(jwtTokenProvider.validateToken(jwt))) {
                 int userId = jwtTokenProvider.getUserIdFromJWT(jwt);
                 UserDetails userDetails = authService.loadUserById(userId);
-                if(userDetails != null) {
+                if (userDetails != null) {
                     UsernamePasswordAuthenticationToken
                             authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -48,7 +45,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
             filterChain.doFilter(request, response);
-        }catch (Exception e){
+        } catch (Exception e) {
             ErrorDetails errorDetails = new ErrorDetails();
             if (e instanceof ExpiredJwtException) {
                 errorDetails.setMessage(Message.JWT_EXPIRED);
