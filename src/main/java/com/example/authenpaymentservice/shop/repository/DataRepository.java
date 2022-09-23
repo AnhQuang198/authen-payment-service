@@ -86,13 +86,18 @@ public class DataRepository {
         query.executeUpdate();
     }
 
-    public Object getByColumn(Class tableName, String idColumn, String value) {
-        StringBuilder hql = new StringBuilder(" FROM ")
-                .append(tableName.getName())
-                .append(" t WHERE t.").append(idColumn)
-                .append(" = ").append(value);
-        Query query = getSession().createQuery(hql.toString());
-        return mapDataQuery(query, tableName);
+    public <T> T get(String nativeQuery, List<Object> paramList, Class obj) {
+        SQLQuery query = createSQLQuery(nativeQuery);
+        setResultTransformer(query, obj);
+
+        if (paramList != null || !paramList.isEmpty()) {
+            int paramSize = paramList.size();
+            for (int i = 0; i < paramSize; i++) {
+                query.setParameter(i, paramList.get(i));
+            }
+        }
+        query.setMaxResults(1);
+        return (T) query.uniqueResult();
     }
 
     public <T> List<T> getAll(Class<T> tableName, String orderColumn) {

@@ -1,11 +1,13 @@
 package com.example.authenpaymentservice.shop.repository;
 
+import com.amazonaws.services.dynamodbv2.xspec.L;
 import com.example.authenpaymentservice.shop.dtos.ShopDTO;
 import com.example.authenpaymentservice.shop.entity.Shop;
 import com.example.authenpaymentservice.shop.enums.ShopState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
