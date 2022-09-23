@@ -10,6 +10,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/shops")
 public class ShopController extends BaseController{
+    @GetMapping("{shopId}")
+    public ResponseEntity<?> getShop(
+            @RequestHeader("x-auth-token") String token,
+            @PathVariable long shopId
+    ) {
+        return shopService.getShop(shopId);
+    }
+
     @GetMapping
     public ResponseEntity<?> getShops(
             @RequestHeader("x-auth-token") String token,

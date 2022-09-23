@@ -14,21 +14,21 @@ spring:
           google:
             clientId: ${GOOGLE_ID}
             clientSecret: ${GOOGLE_SECRET_CODE}
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+#            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email
               - profile
           facebook:
             clientId: ${FACEBOOK_ID}
             clientSecret: ${FACEBOOK_SECRET_CODE}
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+#            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email
               - public_profile
           github:
             clientId: ${GITHUB_ID}
             clientSecret: ${GITHUB_SECRET_CODE}
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+#            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - user:email
               - read:user

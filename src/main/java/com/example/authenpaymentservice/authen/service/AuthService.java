@@ -42,6 +42,8 @@ import java.util.Objects;
 @Service
 @Log4j2
 public class AuthService extends BaseService implements UserDetailsService {
+  private static final String TOKEN_TYPE = "x-auth-token";
+
   @Value("${jwt.otp-expire-time}")
   private int otpExpireTime;
 
@@ -66,7 +68,7 @@ public class AuthService extends BaseService implements UserDetailsService {
       User user = UserData.getCurrentUserLogin(authentication);
       String token = jwtTokenProvider.generateToken(user);
       String refreshToken = jwtTokenProvider.generateRefreshToken(user);
-      response = new LoginResponse(token, refreshToken, "x-auth-token", jwtTokenProvider.getTokenExpireTime());
+      response = new LoginResponse(token, refreshToken, TOKEN_TYPE, jwtTokenProvider.getTokenExpireTime());
     } catch (DisabledException ex) {
       throw new UnauthorizedException(Message.ACCOUNT_NON_ACTIVE);
     } catch (LockedException ex) {
