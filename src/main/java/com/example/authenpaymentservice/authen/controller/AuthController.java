@@ -1,9 +1,6 @@
 package com.example.authenpaymentservice.authen.controller;
 
-import com.example.authenpaymentservice.authen.model.request.LoginRequest;
-import com.example.authenpaymentservice.authen.model.request.OTPRequest;
-import com.example.authenpaymentservice.authen.model.request.OTPVerifyRequest;
-import com.example.authenpaymentservice.authen.model.request.RegisterRequest;
+import com.example.authenpaymentservice.authen.model.request.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +31,8 @@ public class AuthController extends BaseController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword() {
-        return null;
+    public ResponseEntity<?> forgotPassword(@RequestBody @Valid ForgotPassRequest forgotPassRequest) {
+        return authService.forgotPassword(forgotPassRequest);
     }
 
     @PostMapping("/generate-token")
