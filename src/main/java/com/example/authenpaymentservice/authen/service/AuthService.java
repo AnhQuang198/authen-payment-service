@@ -117,7 +117,7 @@ public class AuthService extends BaseService implements UserDetailsService {
         try {
             if (cacheUtils.isExisted(key)) {
                 OtpInfo otpInfo = cacheUtils.get(key, OtpInfo.class);
-                validOtp(otpInfo, request.getOtp());
+                validOtp(otpInfo.getOtp(), request.getOtp());
                 saveUserPassword(user, request);
                 cacheUtils.del(key);
                 cacheUtils.del(tokenKey);
@@ -231,8 +231,8 @@ public class AuthService extends BaseService implements UserDetailsService {
         return encoder.encode(password);
     }
 
-    private void validOtp(OtpInfo otpInfo, String otp) {
-        if (!otpInfo.getOtp().equals(otp)) {
+    private void validOtp(String otp, String confirmOtp) {
+        if (!otp.equals(confirmOtp)) {
             throw new ResourceNotFoundException(Message.OTP_NOT_VALID);
         }
     }
