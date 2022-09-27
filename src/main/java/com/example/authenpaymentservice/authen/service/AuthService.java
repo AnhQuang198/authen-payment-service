@@ -99,6 +99,7 @@ public class AuthService extends BaseService implements UserDetailsService {
                 String key = CacheKey.genForgotPasswordOtp(user.getEmail(), user.getId());
                 cacheUtils.set(key, otpInfo, otpExpireTime);
             }
+            otpProducer.sendOtp(otpInfo.getEmail(), otpInfo.getOtp());
         } catch (Exception e) {
             log.error("Send OTP error: {0}", e);
             e.printStackTrace();
