@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "OtpMessage",
+  "namespace": "demo.account.authen",
+  "fields": [
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "receiver",
+      "type": "string"
+    },
+    {
+      "name": "otp",
+      "type": "string"
+    }
+  ]
+}

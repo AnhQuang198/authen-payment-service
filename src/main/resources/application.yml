@@ -7,6 +7,18 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    topic:
+      replication-factor: ${KAFKA_REPLICATION_FACTOR}
+    producer:
+      retries: 100
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: ${SCHEMA_REGISTRY_URL}
+        specific.avro.reader: true
+      acks: all
   security:
     oauth2:
       client:
