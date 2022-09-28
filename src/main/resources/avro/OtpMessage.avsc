@@ -4,7 +4,11 @@
   "namespace": "demo.account.authen",
   "fields": [
     {
-      "name": "email",
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "receiver",
       "type": "string"
     },
     {

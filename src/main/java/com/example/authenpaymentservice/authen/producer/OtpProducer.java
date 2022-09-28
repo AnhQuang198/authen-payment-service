@@ -1,5 +1,6 @@
 package com.example.authenpaymentservice.authen.producer;
 
+import com.example.authenpaymentservice.authen.enums.MessageType;
 import demo.account.authen.OtpMessage;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,8 @@ public class OtpProducer {
     public boolean sendOtp(String email, String otp) {
         OtpMessage message = new OtpMessage();
         message.setOtp(otp);
-        message.setEmail(email);
+        message.setReceiver(email);
+        message.setType(String.valueOf(MessageType.MAIL));
         otpMessageKafkaTemplate.send(TopicConfig.OTP_TOPIC, message);
         return true;
     }
@@ -24,7 +26,8 @@ public class OtpProducer {
     public boolean sendOtpWithKey(String email, String otp, String key) {
         OtpMessage message = new OtpMessage();
         message.setOtp(otp);
-        message.setEmail(email);
+        message.setReceiver(email);
+        message.setType(String.valueOf(MessageType.MAIL));
         otpMessageKafkaTemplate.send(TopicConfig.OTP_TOPIC, key, message);
         return true;
     }
