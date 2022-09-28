@@ -4,6 +4,7 @@ import com.example.authenpaymentservice.authen.entity.User;
 import com.example.authenpaymentservice.authen.enums.UserRole;
 import com.example.authenpaymentservice.authen.enums.UserState;
 import com.example.authenpaymentservice.authen.security.data.TokenInfo;
+import com.example.authenpaymentservice.authen.utils.Common;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -42,7 +43,8 @@ public class JwtTokenProvider {
     }
 
     private String doGenerateRefreshToken(int userId, String userRole) {
-        return String.format("%s-%s-%s", UUID.randomUUID(), userId, userRole);
+        String refreshToken = String.format("%s-%s-%s", UUID.randomUUID(), userRole, userId);
+        return Common.encode(refreshToken);
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {

@@ -26,28 +26,33 @@ import java.util.Objects;
 public class ShopService extends BaseService {
     public ResponseEntity<?> getShops(int userId, String shopName, String shopState, Pageable pageable) {
         User user = checkUserState(userId);
-        if (!user.getRole().equals(UserRole.ADMIN)) {
-            throw new NoAccessException(Message.NO_ACCESS_RESOURCE);
-        }
+//        if (!user.getRole().equals(UserRole.ADMIN)) {
+//            throw new NoAccessException(Message.NO_ACCESS_RESOURCE);
+//        }
         ShopResponse response = new ShopResponse();
-        Page<ShopDTO> pages;
+        Page<ShopDTO> pages = shopRepository.getShops(shopState, pageable);
         ShopState state = ShopState.valueOf(shopState.toUpperCase());
         if (Objects.nonNull(shopName)) {
-            pages = shopRepository.getShopsByName(state, shopName, pageable);
+//            pages = shopRepository.getShopsByName(state, shopName, pageable);
         } else {
-            pages = shopRepository.getShops(state, pageable);
+//            pages = shopRepository.getShops(state, pageable);
         }
-        response.setShops(pages.getContent());
-        response.setMetadata(Metadata.of(pages));
-        return ResponseEntity.ok(response);
+//        response.setShops(pages.getContent());
+//        response.setMetadata(Metadata.of(pages));
+        return ResponseEntity.ok(pages);
+    }
+
+    public ResponseEntity<?> getShop(long shopId) {
+//        Shop shop = shopRepository.findById(shopId);
+        return null;
     }
 
     @Transactional
     public ResponseEntity<?> createShop(int userId, ShopCreateRequest request) {
-        User user = checkUserState(userId);
-        if (checkShopExisted(userId)) {
-            throw new ResourceNotFoundException(Message.SHOP_EXISTED);
-        }
+//        User user = checkUserState(userId);
+//        if (checkShopExisted(userId)) {
+//            throw new ResourceNotFoundException(Message.SHOP_EXISTED);
+//        }
         Shop shop = new Shop();
         shop.setId(userId);
         shop.setName(request.getName());
@@ -56,7 +61,7 @@ public class ShopService extends BaseService {
         shop.setDescription(request.getDescription());
         shop.setState(ShopState.PENDING);
         shopRepository.save(shop);
-        updateUserRole(user);
+//        updateUserRole(user);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
@@ -65,9 +70,9 @@ public class ShopService extends BaseService {
         if (!user.getRole().equals(UserRole.ADMIN)) {
             throw new NoAccessException(Message.NO_ACCESS_RESOURCE);
         }
-        Shop shop = shopRepository.findShopById(shopId);
-        shop.setState(ShopState.APPROVED);
-        shopRepository.save(shop);
+//        Shop shop = shopRepository.findById(shopId);
+//        shop.setState(ShopState.APPROVED);
+//        shopRepository.saveOrUpdate(shop);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

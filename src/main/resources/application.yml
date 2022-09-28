@@ -14,30 +14,34 @@ spring:
           google:
             clientId: ${GOOGLE_ID}
             clientSecret: ${GOOGLE_SECRET_CODE}
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+#            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email
               - profile
           facebook:
             clientId: ${FACEBOOK_ID}
             clientSecret: ${FACEBOOK_SECRET_CODE}
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+#            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email
               - public_profile
           github:
             clientId: ${GITHUB_ID}
             clientSecret: ${GITHUB_SECRET_CODE}
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+#            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - user:email
               - read:user
 server:
   port: ${PORT}
+redis:
+  host: ${REDIS_HOST}
+  port: ${REDIS_PORT}
 jwt:
   secret-key: ${JWT_SECRET_KEY}
   token-expire-time: ${JWT_TOKEN_EXPIRE_TIME}
   refresh-expire-time: ${JWT_REFRESH_TOKEN_EXPIRE_TIME}
+  otp-expire-time: ${JWT_OTP_EXPIRE_TIME}
 auth:
   authorizedRedirectUris: ${OAUTH_REDIRECT_URI}
 
