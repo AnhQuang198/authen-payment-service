@@ -47,9 +47,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             ErrorDetails errorDetails = new ErrorDetails();
-            if (e instanceof ExpiredJwtException) {
-                errorDetails.setMessage(Message.JWT_EXPIRED);
-            }
             errorDetails.setMessage(Message.NO_ACCESS_RESOURCE);
             errorDetails.setStatusCode(HttpStatus.SC_UNAUTHORIZED);
             errorDetails.setPath(request.getRequestURI());
@@ -58,6 +55,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+            if (e instanceof ExpiredJwtException) {
+                errorDetails.setMessage(Message.JWT_EXPIRED);
+                errorDetails.setStatusCode(HttpStatus.SC_FORBIDDEN);
+                response.setStatus(HttpStatus.SC_FORBIDDEN);
+            }
             response.getWriter().write(JsonParser.toJson(errorDetails));
         }
     }
