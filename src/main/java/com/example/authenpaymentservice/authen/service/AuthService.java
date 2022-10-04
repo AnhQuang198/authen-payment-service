@@ -42,7 +42,7 @@ import java.util.Objects;
 public class AuthService extends BaseService implements UserDetailsService {
     private static final String TOKEN_TYPE = "x-auth-token";
 
-    @Value("${jwt.otp-expire-time}")
+    @Value("${otp-expire-time}")
     private int otpExpireTime;
 
     public ResponseEntity<?> register(RegisterRequest request) {
@@ -72,7 +72,7 @@ public class AuthService extends BaseService implements UserDetailsService {
             String token = jwtTokenProvider.generateToken(user);
             String refreshToken = jwtTokenProvider.generateRefreshToken(user);
             cacheRefreshToken(user.getId(), refreshToken);
-            response = new LoginResponse(token, refreshToken, TOKEN_TYPE, jwtTokenProvider.getTokenExpireTime());
+            response = new LoginResponse(token, refreshToken, TOKEN_TYPE, jwtTokenProvider.getExpAt());
         } catch (DisabledException ex) {
             throw new UnauthorizedException(Message.ACCOUNT_NON_ACTIVE);
         } catch (LockedException ex) {
@@ -178,7 +178,7 @@ public class AuthService extends BaseService implements UserDetailsService {
                 throw new ResourceNotFoundException(Message.NOT_FOUND);
             }
             String newAccessToken = jwtTokenProvider.generateToken(user);
-            response = new LoginResponse(newAccessToken, refreshToken, TOKEN_TYPE, jwtTokenProvider.getTokenExpireTime());
+            response = new LoginResponse(newAccessToken, refreshToken, TOKEN_TYPE, jwtTokenProvider.getExpAt());
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResourceNotFoundException(Message.NOT_FOUND);

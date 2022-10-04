@@ -30,6 +30,9 @@ public class JwtTokenProvider {
     @Value("${jwt.refresh-expire-time}")
     private long refreshExpireTime;
 
+    @Getter
+    private long expAt;
+
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", String.valueOf(user.getId()));
@@ -48,9 +51,11 @@ public class JwtTokenProvider {
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
+        long iat = System.currentTimeMillis() + tokenExpireTime;
+        expAt = iat;
         return Jwts.builder().setClaims(claims).setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis() + tokenExpireTime)) //milliseconds
-                .setExpiration(new Date(System.currentTimeMillis() + tokenExpireTime)) //milliseconds
+                .setIssuedAt(new Date(iat)) //milliseconds
+                .setExpiration(new Date(iat)) //milliseconds
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
