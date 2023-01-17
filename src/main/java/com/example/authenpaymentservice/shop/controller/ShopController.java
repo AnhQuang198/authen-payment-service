@@ -1,8 +1,8 @@
 package com.example.authenpaymentservice.shop.controller;
 
+import com.example.authenpaymentservice.shop.model.request.CommonRequest;
 import com.example.authenpaymentservice.shop.model.request.ShopAddressRequest;
 import com.example.authenpaymentservice.shop.model.request.ShopCreateRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +21,10 @@ public class ShopController extends BaseController{
     @GetMapping
     public ResponseEntity<?> getShops(
             @RequestHeader("x-auth-token") String token,
-            @RequestParam(value = "state", defaultValue = "PENDING") String shopState,
-            @RequestParam(value = "name", required = false) String shopName,
-            Pageable pageable
-    ) {
+            @RequestBody CommonRequest request
+            ) {
         int userId = tokenProvider.getUserIdFromJWT(token);
-        return shopService.getShops(userId, shopName, shopState, pageable);
+        return shopService.getShops(userId, request);
     }
 
     @PostMapping

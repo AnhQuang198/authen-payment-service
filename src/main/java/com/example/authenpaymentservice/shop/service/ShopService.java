@@ -5,54 +5,48 @@ import com.example.authenpaymentservice.authen.enums.UserRole;
 import com.example.authenpaymentservice.exception.Message;
 import com.example.authenpaymentservice.exception.NoAccessException;
 import com.example.authenpaymentservice.exception.ResourceNotFoundException;
-import com.example.authenpaymentservice.shop.dtos.ShopDTO;
 import com.example.authenpaymentservice.shop.entity.Shop;
 import com.example.authenpaymentservice.shop.entity.ShopAddress;
 import com.example.authenpaymentservice.shop.enums.ShopState;
+import com.example.authenpaymentservice.shop.model.Datatable;
+import com.example.authenpaymentservice.shop.model.dtos.ShopDTO;
+import com.example.authenpaymentservice.shop.model.request.CommonRequest;
 import com.example.authenpaymentservice.shop.model.request.ShopAddressRequest;
 import com.example.authenpaymentservice.shop.model.request.ShopCreateRequest;
 import com.example.authenpaymentservice.shop.model.response.ShopResponse;
-import com.example.authenpaymentservice.shop.model.response.data.Metadata;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Objects;
 
 @Service
 public class ShopService extends BaseService {
-    public ResponseEntity<?> getShops(int userId, String shopName, String shopState, Pageable pageable) {
+    public ResponseEntity<?> getShops(int userId, CommonRequest request) {
         User user = checkUserState(userId);
-//        if (!user.getRole().equals(UserRole.ADMIN)) {
-//            throw new NoAccessException(Message.NO_ACCESS_RESOURCE);
-//        }
-        ShopResponse response = new ShopResponse();
-        Page<ShopDTO> pages = shopRepository.getShops(shopState, pageable);
-        ShopState state = ShopState.valueOf(shopState.toUpperCase());
-        if (Objects.nonNull(shopName)) {
-//            pages = shopRepository.getShopsByName(state, shopName, pageable);
-        } else {
-//            pages = shopRepository.getShops(state, pageable);
+        if (!user.getRole().equals(UserRole.ADMIN)) {
+            throw new NoAccessException(Message.NO_ACCESS_RESOURCE);
         }
-//        response.setShops(pages.getContent());
+        ShopResponse response = new ShopResponse();
+        Datatable datatable = shopRepository.getShops(request);
+        response.setShops((List<ShopDTO>) datatable.getData());
 //        response.setMetadata(Metadata.of(pages));
-        return ResponseEntity.ok(pages);
+        return ResponseEntity.ok(response);
     }
 
     public ResponseEntity<?> getShop(long shopId) {
-//        Shop shop = shopRepository.findById(shopId);
-        return null;
+        Shop shop = shopRepository.getEntityManager().find(Shop.class, shopId);
+        return ResponseEntity.ok(shop);
     }
 
     @Transactional
     public ResponseEntity<?> createShop(int userId, ShopCreateRequest request) {
-//        User user = checkUserState(userId);
-//        if (checkShopExisted(userId)) {
-//            throw new ResourceNotFoundException(Message.SHOP_EXISTED);
-//        }
+        User user = checkUserState(userId);
+        if (checkShopExisted(userId)) {
+            throw new ResourceNotFoundException(Message.SHOP_EXISTED);
+        }
         Shop shop = new Shop();
         shop.setId(userId);
         shop.setName(request.getName());
@@ -60,8 +54,8 @@ public class ShopService extends BaseService {
         shop.setAvatarUrl(request.getAvatarUrl());
         shop.setDescription(request.getDescription());
         shop.setState(ShopState.PENDING);
-        shopRepository.save(shop);
-//        updateUserRole(user);
+        shopRepository.saveOrUpdate(shop);
+        updateUserRole(user);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
@@ -70,9 +64,9 @@ public class ShopService extends BaseService {
         if (!user.getRole().equals(UserRole.ADMIN)) {
             throw new NoAccessException(Message.NO_ACCESS_RESOURCE);
         }
-//        Shop shop = shopRepository.findById(shopId);
-//        shop.setState(ShopState.APPROVED);
-//        shopRepository.saveOrUpdate(shop);
+        Shop shop = shopRepository.getEntityManager().find(Shop.class, shopId);
+        shop.setState(ShopState.APPROVED);
+        shopRepository.saveOrUpdate(shop);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

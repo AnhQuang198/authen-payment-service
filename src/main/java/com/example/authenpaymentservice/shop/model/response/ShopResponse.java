@@ -1,6 +1,6 @@
 package com.example.authenpaymentservice.shop.model.response;
 
-import com.example.authenpaymentservice.shop.dtos.ShopDTO;
+import com.example.authenpaymentservice.shop.model.dtos.ShopDTO;
 import com.example.authenpaymentservice.shop.model.response.data.Metadata;
 import lombok.AllArgsConstructor;
 import lombok.Data;

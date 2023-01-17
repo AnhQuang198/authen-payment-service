@@ -34,10 +34,10 @@ public class BaseService {
     }
 
     protected boolean checkShopExisted(int userId) {
-//        Shop shop = shopRepository.findById(userId);
-//        if (Objects.isNull(shop) || shop.isLocked()) {
-//            return false;
-//        }
+        Shop shop = shopRepository.getEntityManager().find(Shop.class, userId);
+        if (Objects.isNull(shop) || shop.isLocked()) {
+            return false;
+        }
         return true;
     }
 }

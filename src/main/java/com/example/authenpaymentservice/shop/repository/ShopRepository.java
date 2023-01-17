@@ -1,56 +1,45 @@
 package com.example.authenpaymentservice.shop.repository;
 
-import com.amazonaws.services.dynamodbv2.xspec.L;
-import com.example.authenpaymentservice.shop.dtos.ShopDTO;
 import com.example.authenpaymentservice.shop.entity.Shop;
-import com.example.authenpaymentservice.shop.enums.ShopState;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.authenpaymentservice.shop.model.Datatable;
+import com.example.authenpaymentservice.shop.model.dtos.ShopDTO;
+import com.example.authenpaymentservice.shop.model.request.CommonRequest;
+import com.example.authenpaymentservice.shop.utils.StringUtils;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Repository
-public class ShopRepository {
+public class ShopRepository extends BaseRepository{
 
-    //    Shop findShopById(int id);
-//
-//    @Query("SELECT new com.example.authenpaymentservice.shop.dtos.ShopDTO(s.id, s.name, u.email, u.phone, s.state, s.isLocked, " +
-//            "s.createdAt)" +
-//            " FROM Shop s " +
-//            "LEFT JOIN User u ON s.id = u.id " +
-//            "LEFT JOIN ShopAddress a ON s.id = a.shopId" +
-//            " WHERE s.state = ?1")
-//    Page<ShopDTO> getShops(ShopState shopState, Pageable pageable);
-//
-//    @Query("SELECT new com.example.authenpaymentservice.shop.dtos.ShopDTO(s.id, s.name, u.email, u.phone, s.state, s.isLocked, " +
-//            "s.createdAt)" +
-//            " FROM Shop s " +
-//            "LEFT JOIN User u ON s.id = u.id " +
-//            "LEFT JOIN ShopAddress a ON s.id = a.shopId " +
-//            "WHERE s.state = ?1 AND s.name LIKE ?2%")
-//    Page<ShopDTO> getShopsByName(ShopState shopState, String shopName, Pageable pageable);
-
-    private DataRepository dataRepository;
-
-    @Autowired
-    public ShopRepository(DataRepository dataRepository) {
-        this.dataRepository = dataRepository;
+    public Datatable getShops(CommonRequest request) {
+        if (request.getFilterValues() == null) {
+            request.setFilterValues(new HashMap<>());
+        }
+        Map<String, String> filterValues = request.getFilterValues();
+        Map<String, Object> params = new HashMap<>();
+        StringBuilder sql = new StringBuilder("SELECT ");
+        sql.append("        s.id as shopId, ");
+        sql.append("        s.shop_name as shopName, ");
+        sql.append("        s.state as state, ");
+        sql.append("        s.is_locked as isLocked, ");
+        sql.append("        s.avatar_url as avatarUrl, ");
+        sql.append("        s.cover_url as coverUrl, ");
+        sql.append("        s.description as description, ");
+        sql.append("        s.created_at as createdAt ");
+        sql.append("        FROM shop s WHERE 1=1 ");
+        //shopName
+        if (StringUtils.isNotNullOrEmpty(filterValues.get("name"))) {
+            sql.append("AND s.name = :name ");
+            params.put("name", filterValues.get("name"));
+        }
+        //state
+        if (StringUtils.isNotNullOrEmpty(filterValues.get("state"))) {
+            sql.append("AND s.state = :state ");
+            params.put("state", filterValues.get("state").toUpperCase());
+        }
+        return getListDataTableBySqlQuery(sql.toString(), params, request.getPageIndex(), request.getPageSize(), ShopDTO.class, "createdAt", "desc");
     }
 
-    public void save(Shop shop) {
-        dataRepository.save(shop);
-    }
-
-    public void saveOrUpdate(Shop shop) {
-        dataRepository.saveOrUpdate(shop);
-    }
-
-    public Page<ShopDTO> getShops(String shopState, Pageable pageable) {
-        StringBuilder sql = new StringBuilder("SELECT id, shop_name AS shopName, state, is_locked AS isLocked, created_at AS createdAt")
-                .append("FROM shop")
-                .append("WHERE state = ").append(shopState);
-
-        return dataRepository.listAll(Shop.class, pageable);
-    }
 }
