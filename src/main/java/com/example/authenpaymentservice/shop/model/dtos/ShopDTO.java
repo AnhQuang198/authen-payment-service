@@ -1,11 +1,13 @@
 package com.example.authenpaymentservice.shop.model.dtos;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
-@Data
-public class ShopDTO {
+@Getter
+@Setter
+public class ShopDTO extends BaseDTO{
     private Integer shopId;
     private String shopName;
     private String state;

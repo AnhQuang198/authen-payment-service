@@ -58,6 +58,7 @@ public abstract class BaseRepository<TDTO, T> {
         entityManager.persist(obj);
     }
 
+    //Mysql database query
     public Datatable getListDataTableBySqlQuery(String sqlQuery,
                                                 Map<String, Object> parameters,
                                                 int page, int pageSize,
@@ -66,68 +67,141 @@ public abstract class BaseRepository<TDTO, T> {
         log.info("--- Start request to search data {} ---");
         Date startTime = new Date();
         Datatable dataReturn = new Datatable();
-        //Oracle
-        String sqlQueryResult = " SELECT * FROM ( "
-                + " SELECT * FROM ( SELECT a.*, rownum indexRow FROM ( "
-                + " SELECT * FROM ( "
-                + sqlQuery
-                + " ) ";
-        if (StringUtils.isNotNullOrEmpty(sortName)) {
-            Field[] fields = FieldUtils.getAllFields(mappedClass);
-            Map<String, String> mapField = new HashMap<>();
-            for (Field field : fields) {
-                mapField.put(field.getName(), field.getName());
-            }
-            if ("asc".equalsIgnoreCase(sortType)) {
-                sqlQueryResult += " ORDER BY " + mapField.get(sortName) + " asc";
-            } else if ("desc".equalsIgnoreCase(sortType)) {
-                sqlQueryResult += " ORDER BY " + mapField.get(sortName) + " desc";
-            } else {
-                sqlQueryResult += " ORDER BY " + mapField.get(sortName);
-            }
-        }
-        sqlQueryResult +=
-                " ) a WHERE rownum < ((:p_page_number * :p_page_length) + 1 )) WHERE indexRow >= (((:p_page_number-1) * :p_page_length) + 1) "
-                        + " ) T_TABLE_NAME, ";
-        sqlQueryResult += " ( SELECT COUNT(*) totalRow FROM ( "
-                + sqlQuery
-                + " ) T_TABLE_TOTAL ) ";
-        sqlQueryResult += " T_TABLE_NAME_TOTAL ";
-        parameters.put("p_page_number", page);
-        parameters.put("p_page_length", pageSize);
-        List<?> list = getNamedParameterJdbcTemplateNormal()
-                .query(sqlQueryResult, parameters, BeanPropertyRowMapper.newInstance(mappedClass));
-        int count = 0;
-        if (list.isEmpty()) {
-            dataReturn.setTotalElements(count);
-        } else {
-            try {
-                Object obj = list.get(0);
-                Field field = obj.getClass().getSuperclass().getDeclaredField("totalRow");
-                field.setAccessible(true);
-                Object value = field.get(obj);
-                if (ObjectUtils.allNotNull(value)) {
-                    count = Integer.parseInt(value.toString());
-                    dataReturn.setTotalElements(count);
+        //Mysql
+        try {
+            StringBuilder sqlQueryResult = new StringBuilder("SELECT * FROM (( \n");
+            sqlQueryResult.append("SELECT a.* FROM (( \n");
+            sqlQueryResult.append(sqlQuery);
+            sqlQueryResult.append(" )");
+            if (StringUtils.isNotNullOrEmpty(sortName)) {
+                Field[] fields = FieldUtils.getAllFields(mappedClass);
+                Map<String, String> mapField = new HashMap<>();
+                for (Field field : fields) {
+                    mapField.put(field.getName(), field.getName());
                 }
-            } catch (NoSuchFieldException e) {
-                log.debug(e.getMessage(), e);
-            } catch (IllegalAccessException e) {
-                log.debug(e.getMessage(), e);
+                if ("asc".equalsIgnoreCase(sortType)) {
+                    sqlQueryResult.append(" ORDER BY ").append(mapField.get(sortName)).append(" asc");
+                } else if ("desc".equalsIgnoreCase(sortType)) {
+                    sqlQueryResult.append(" ORDER BY ").append(mapField.get(sortName)).append(" desc");
+                } else {
+                    sqlQueryResult.append(" ORDER BY ").append(mapField.get(sortName));
+                }
             }
-        }
-        if (pageSize > 0) {
-            if (count % pageSize == 0) {
-                dataReturn.setTotalPages(count / pageSize);
+            sqlQueryResult.append(" ) a) LIMIT :p_page_limit OFFSET :p_page_offset) T_TABLE_NAME, ");
+            sqlQueryResult.append(" ( SELECT COUNT(*) totalRow FROM ( ");
+            sqlQueryResult.append(sqlQuery).append(" ) T_TABLE_TOTAL ) T_TABLE_NAME_TOTAL");
+            parameters.put("p_page_limit", pageSize);
+            parameters.put("p_page_offset", page * pageSize);
+            List<?> list = getNamedParameterJdbcTemplateNormal()
+                    .query(sqlQueryResult.toString(), parameters, BeanPropertyRowMapper.newInstance(mappedClass));
+            int count = 0;
+            if (list.isEmpty()) {
+                dataReturn.setTotalElements(count);
             } else {
-                dataReturn.setTotalPages((count / pageSize) + 1);
+                try {
+                    Object obj = list.get(0);
+                    Field field = obj.getClass().getSuperclass().getDeclaredField("totalRow");
+                    field.setAccessible(true);
+                    Object value = field.get(obj);
+                    if (ObjectUtils.allNotNull(value)) {
+                        count = Integer.parseInt(value.toString());
+                        dataReturn.setTotalElements(count);
+                    }
+                } catch (NoSuchFieldException e) {
+                    log.debug(e.getMessage(), e);
+                } catch (IllegalAccessException e) {
+                    log.debug(e.getMessage(), e);
+                }
             }
+            if (pageSize > 0) {
+                if (count % pageSize == 0) {
+                    dataReturn.setTotalPages(count / pageSize);
+                } else {
+                    dataReturn.setTotalPages((count / pageSize) + 1);
+                }
+            }
+            dataReturn.setPage(page);
+            dataReturn.setSize(pageSize);
+            dataReturn.setData(list);
+        } catch (Exception e) {
+            log.error("[SQL] Bad SQL grammar");
         }
-        dataReturn.setData(list);
         log.info(
                 "------End search : time " + (new Date().getTime() - startTime.getTime()) + " miliseconds");
         return dataReturn;
     }
+
+    //Oracle database query
+//    public Datatable getListDataTableBySqlQuery(String sqlQuery,
+//                                                Map<String, Object> parameters,
+//                                                int page, int pageSize,
+//                                                Class<?> mappedClass,
+//                                                String sortName, String sortType) {
+//        log.info("--- Start request to search data {} ---");
+//        Date startTime = new Date();
+//        Datatable dataReturn = new Datatable();
+//        //Oracle
+//        String sqlQueryResult = " SELECT * FROM ( "
+//                + " SELECT * FROM ( SELECT a.*, rownum indexRow FROM ( "
+//                + " SELECT * FROM ( "
+//                + sqlQuery
+//                + " ) ";
+//        if (StringUtils.isNotNullOrEmpty(sortName)) {
+//            Field[] fields = FieldUtils.getAllFields(mappedClass);
+//            Map<String, String> mapField = new HashMap<>();
+//            for (Field field : fields) {
+//                mapField.put(field.getName(), field.getName());
+//            }
+//            if ("asc".equalsIgnoreCase(sortType)) {
+//                sqlQueryResult += " ORDER BY " + mapField.get(sortName) + " asc";
+//            } else if ("desc".equalsIgnoreCase(sortType)) {
+//                sqlQueryResult += " ORDER BY " + mapField.get(sortName) + " desc";
+//            } else {
+//                sqlQueryResult += " ORDER BY " + mapField.get(sortName);
+//            }
+//        }
+//        sqlQueryResult +=
+//                " ) a WHERE rownum < ((:p_page_number * :p_page_length) + 1 )) WHERE indexRow >= (((:p_page_number-1) * :p_page_length) + 1) "
+//                        + " ) T_TABLE_NAME, ";
+//        sqlQueryResult += " ( SELECT COUNT(*) totalRow FROM ( "
+//                + sqlQuery
+//                + " ) T_TABLE_TOTAL ) ";
+//        sqlQueryResult += " T_TABLE_NAME_TOTAL ";
+//        parameters.put("p_page_number", page);
+//        parameters.put("p_page_length", pageSize);
+//        List<?> list = getNamedParameterJdbcTemplateNormal()
+//                .query(sqlQueryResult, parameters, BeanPropertyRowMapper.newInstance(mappedClass));
+//        int count = 0;
+//        if (list.isEmpty()) {
+//            dataReturn.setTotalElements(count);
+//        } else {
+//            try {
+//                Object obj = list.get(0);
+//                Field field = obj.getClass().getSuperclass().getDeclaredField("totalRow");
+//                field.setAccessible(true);
+//                Object value = field.get(obj);
+//                if (ObjectUtils.allNotNull(value)) {
+//                    count = Integer.parseInt(value.toString());
+//                    dataReturn.setTotalElements(count);
+//                }
+//            } catch (NoSuchFieldException e) {
+//                log.debug(e.getMessage(), e);
+//            } catch (IllegalAccessException e) {
+//                log.debug(e.getMessage(), e);
+//            }
+//        }
+//        if (pageSize > 0) {
+//            if (count % pageSize == 0) {
+//                dataReturn.setTotalPages(count / pageSize);
+//            } else {
+//                dataReturn.setTotalPages((count / pageSize) + 1);
+//            }
+//        }
+//        dataReturn.setData(list);
+//        log.info(
+//                "------End search : time " + (new Date().getTime() - startTime.getTime()) + " miliseconds");
+//        return dataReturn;
+//    }
 
     @SuppressWarnings("unchecked")
     public List<T> findAll(Class<T> persistentClass) {

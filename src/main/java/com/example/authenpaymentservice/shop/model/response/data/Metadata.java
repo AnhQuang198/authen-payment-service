@@ -1,5 +1,6 @@
 package com.example.authenpaymentservice.shop.model.response.data;
 
+import com.example.authenpaymentservice.shop.model.Datatable;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 
@@ -10,8 +11,8 @@ public class Metadata {
   private final long total;
   private final long totalPages;
 
-  public static Metadata of(Page page) {
+  public static Metadata of(Datatable data) {
     return new Metadata(
-            page.getNumber(), page.getContent().size(), page.getTotalElements(), page.getTotalPages());
+            data.getPage(), data.getSize(), data.getTotalElements(), data.getTotalPages());
   }
 }

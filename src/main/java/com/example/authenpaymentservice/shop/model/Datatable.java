@@ -10,7 +10,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Datatable {
-  private int totalElements;
-  private int totalPages;
-  private List<?> data;
+    private int page;
+    private int size;
+    private int totalElements;
+    private int totalPages;
+    private List<?> data;
 }

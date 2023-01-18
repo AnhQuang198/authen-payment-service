@@ -14,6 +14,7 @@ import com.example.authenpaymentservice.shop.model.request.CommonRequest;
 import com.example.authenpaymentservice.shop.model.request.ShopAddressRequest;
 import com.example.authenpaymentservice.shop.model.request.ShopCreateRequest;
 import com.example.authenpaymentservice.shop.model.response.ShopResponse;
+import com.example.authenpaymentservice.shop.model.response.data.Metadata;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class ShopService extends BaseService {
         ShopResponse response = new ShopResponse();
         Datatable datatable = shopRepository.getShops(request);
         response.setShops((List<ShopDTO>) datatable.getData());
-//        response.setMetadata(Metadata.of(pages));
+        response.setMetadata(Metadata.of(datatable));
         return ResponseEntity.ok(response);
     }
 

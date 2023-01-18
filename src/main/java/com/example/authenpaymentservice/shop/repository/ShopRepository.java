@@ -27,8 +27,22 @@ public class ShopRepository extends BaseRepository{
         sql.append("        s.avatar_url as avatarUrl, ");
         sql.append("        s.cover_url as coverUrl, ");
         sql.append("        s.description as description, ");
-        sql.append("        s.created_at as createdAt ");
-        sql.append("        FROM shop s WHERE 1=1 ");
+        sql.append("        s.created_at as createdAt, ");
+        sql.append("        u.email as email, ");
+        sql.append("        u.phone as phone, ");
+        sql.append("        sadd.add_detail as addDetail, ");
+        sql.append("        c.id as cityId, ");
+        sql.append("        c.city_name as cityName, ");
+        sql.append("        w.id as wardId, ");
+        sql.append("        w.ward_name as wardName, ");
+        sql.append("        d.id as districtId, ");
+        sql.append("        d.district_name as districtName ");
+        sql.append("        FROM shop s ");
+        sql.append("        INNER JOIN user u ON s.id = u.id ");
+        sql.append("        LEFT JOIN shop_address sadd ON s.id = sadd.shop_id ");
+        sql.append("        LEFT JOIN city c ON sadd.city_id = c.id ");
+        sql.append("        LEFT JOIN ward w ON sadd.ward_id = w.id ");
+        sql.append("        LEFT JOIN district d ON sadd.district_id = d.id WHERE 1=1 ");
         //shopName
         if (StringUtils.isNotNullOrEmpty(filterValues.get("name"))) {
             sql.append("AND s.name = :name ");
@@ -39,7 +53,7 @@ public class ShopRepository extends BaseRepository{
             sql.append("AND s.state = :state ");
             params.put("state", filterValues.get("state").toUpperCase());
         }
-        return getListDataTableBySqlQuery(sql.toString(), params, request.getPageIndex(), request.getPageSize(), ShopDTO.class, "createdAt", "desc");
+        return getListDataTableBySqlQuery(sql.toString(), params, request.getPageIndex(), request.getPageSize(), ShopDTO.class, "shopId", "desc");
     }
 
 }
