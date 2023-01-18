@@ -37,7 +37,7 @@ public class ShopService extends BaseService {
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity<?> getShop(long shopId) {
+    public ResponseEntity<?> getShop(int shopId) {
         Shop shop = shopRepository.getEntityManager().find(Shop.class, shopId);
         return ResponseEntity.ok(shop);
     }

@@ -1,6 +1,5 @@
 package com.example.authenpaymentservice.shop.repository;
 
-import com.example.authenpaymentservice.shop.entity.Shop;
 import com.example.authenpaymentservice.shop.model.Datatable;
 import com.example.authenpaymentservice.shop.model.dtos.ShopDTO;
 import com.example.authenpaymentservice.shop.model.request.CommonRequest;
@@ -45,8 +44,8 @@ public class ShopRepository extends BaseRepository{
         sql.append("        LEFT JOIN district d ON sadd.district_id = d.id WHERE 1=1 ");
         //shopName
         if (StringUtils.isNotNullOrEmpty(filterValues.get("name"))) {
-            sql.append("AND s.name = :name ");
-            params.put("name", filterValues.get("name"));
+            sql.append("AND s.shop_name LIKE :name ");
+            params.put("name", "%" + filterValues.get("name") + "%");
         }
         //state
         if (StringUtils.isNotNullOrEmpty(filterValues.get("state"))) {

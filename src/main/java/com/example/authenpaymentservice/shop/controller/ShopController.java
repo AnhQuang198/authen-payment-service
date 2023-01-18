@@ -13,7 +13,7 @@ public class ShopController extends BaseController{
     @GetMapping("{shopId}")
     public ResponseEntity<?> getShop(
             @RequestHeader("x-auth-token") String token,
-            @PathVariable long shopId
+            @PathVariable Integer shopId
     ) {
         return shopService.getShop(shopId);
     }
