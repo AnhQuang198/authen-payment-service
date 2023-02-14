@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/shops")
 public class ShopController extends BaseController{
+    private static final String TOKEN_TYPE = "x-auth-token";
     @GetMapping("{shopId}")
     public ResponseEntity<?> getShop(
-            @RequestHeader("x-auth-token") String token,
+            @RequestHeader(TOKEN_TYPE) String token,
             @PathVariable Integer shopId
     ) {
         return shopService.getShop(shopId);
@@ -20,7 +21,7 @@ public class ShopController extends BaseController{
 
     @GetMapping
     public ResponseEntity<?> getShops(
-            @RequestHeader("x-auth-token") String token,
+            @RequestHeader(TOKEN_TYPE) String token,
             @RequestBody CommonRequest request
             ) {
         int userId = tokenProvider.getUserIdFromJWT(token);
@@ -29,7 +30,7 @@ public class ShopController extends BaseController{
 
     @PostMapping
     public ResponseEntity<?> createShop(
-            @RequestHeader("x-auth-token") String token,
+            @RequestHeader(TOKEN_TYPE) String token,
             @RequestBody ShopCreateRequest shopCreateRequest
             ) {
         int userId = tokenProvider.getUserIdFromJWT(token);
@@ -38,7 +39,7 @@ public class ShopController extends BaseController{
 
     @PutMapping("/approve/{shopId}")
     public ResponseEntity<?> approveShop(
-            @RequestHeader("x-auth-token") String token,
+            @RequestHeader(TOKEN_TYPE) String token,
             @PathVariable("shopId") Integer shopId
     ) {
         int userId = tokenProvider.getUserIdFromJWT(token);
@@ -47,7 +48,7 @@ public class ShopController extends BaseController{
 
     @PostMapping("/address")
     public ResponseEntity<?> createAddress(
-            @RequestHeader("x-auth-token") String token,
+            @RequestHeader(TOKEN_TYPE) String token,
             @RequestBody ShopAddressRequest request
     ) {
         int shopId = tokenProvider.getUserIdFromJWT(token);
@@ -56,7 +57,7 @@ public class ShopController extends BaseController{
 
     @PutMapping("/address")
     public ResponseEntity<?> updateAddress(
-            @RequestHeader("x-auth-token") String token,
+            @RequestHeader(TOKEN_TYPE) String token,
             @RequestBody ShopAddressRequest request
     ) {
         int shopId = tokenProvider.getUserIdFromJWT(token);

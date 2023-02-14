@@ -8,6 +8,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.log4j.Log4j2;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +25,8 @@ import java.util.Objects;
 
 @Log4j2
 public class JwtAuthFilter extends OncePerRequestFilter {
+    @Value("${jwt.token-type}")
+    private String jwtTokenType;
     @Autowired
     private AuthService authService;
 
@@ -65,7 +68,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("x-auth-token");
+        String bearerToken = request.getHeader(jwtTokenType);
         if (StringUtils.hasText(bearerToken)) {
             return bearerToken;
         }
