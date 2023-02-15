@@ -93,7 +93,7 @@ public class AuthService extends BaseService implements UserDetailsService {
             if (dto.getOtpType().equals(OTPType.REGISTER.toString())) {
                 User user = userRepository.findUserByEmail(dto.getEmail());
                 if (user.getState().equals(UserState.ACTIVE)) {
-                    throw new ResourceNotFoundException(Message.ACCOUNT_ACTIVE);
+                    throw new BadRequestException(Message.ACCOUNT_ACTIVE);
                 }
                 String key = CacheKey.genMailOtp(dto.getEmail());
                 cacheUtils.set(key, otpInfo, otpExpireTime);
@@ -103,6 +103,8 @@ public class AuthService extends BaseService implements UserDetailsService {
                 cacheUtils.set(key, otpInfo, otpExpireTime);
             }
             otpProducer.sendOtp(otpInfo.getEmail(), otpInfo.getOtp());
+        } catch (BadRequestException e) {
+            throw new BadRequestException(Message.ACCOUNT_ACTIVE);
         } catch (Exception e) {
             log.error("Send OTP error: {0}", e);
             e.printStackTrace();
