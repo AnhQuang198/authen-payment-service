@@ -72,7 +72,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     }
 
     private boolean checkUserState(User user) {
-        if (user.getState().equals(UserState.NON_ACTIVE)) {
+        if (user.getState().equals(UserState.NOT_ACTIVE)) {
             return false;
         }
         return true;

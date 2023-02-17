@@ -1,8 +1,11 @@
 package com.example.authenpaymentservice.shop.entity;
 
 import com.example.authenpaymentservice.shop.enums.ShopState;
+import com.example.authenpaymentservice.shop.utils.PostgreSQLEnumType;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -11,7 +14,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "shop")
+@Table(name = "shop", schema = "shops")
+@TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
 public class Shop implements Serializable {
     private static final long serialVersionUID = 1905122041950251207L;
 
@@ -34,6 +38,7 @@ public class Shop implements Serializable {
     private boolean isLocked;
 
     @Column(name = "state")
+    @Type(type = "pgsql_enum")
     @Enumerated(value = EnumType.STRING)
     private ShopState state;
 

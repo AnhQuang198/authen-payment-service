@@ -170,7 +170,7 @@ public class AuthService extends BaseService implements UserDetailsService {
             String refreshTokenDecode = Common.decode(refreshToken);
             int userId = Integer.parseInt(refreshTokenDecode.substring(Math.max(refreshTokenDecode.length() - 1, 0)));
             User user = userRepository.findUserById(userId);
-            if (Objects.isNull(user) || user.getState().equals(UserState.NON_ACTIVE) || user.isLocked()) {
+            if (Objects.isNull(user) || user.getState().equals(UserState.NOT_ACTIVE) || user.isLocked()) {
                 throw new ResourceNotFoundException(Message.ACCOUNT_LOCKED);
             }
 
