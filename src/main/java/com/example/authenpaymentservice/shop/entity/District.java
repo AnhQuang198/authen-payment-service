@@ -6,14 +6,18 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "district")
+@Table(name = "district", schema = "public")
 public class District {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "district_name")
     private String districtName;
 
-    @JoinColumn(name = "city_id")
+    @Column(name = "full_address")
+    private String fullAddress;
+
+    @Column(name = "city_id")
     private Integer cityId;
 }

@@ -3,18 +3,22 @@ package com.example.authenpaymentservice.authen.entity;
 import com.example.authenpaymentservice.authen.enums.AuthProvider;
 import com.example.authenpaymentservice.authen.enums.UserRole;
 import com.example.authenpaymentservice.authen.enums.UserState;
+import com.example.authenpaymentservice.authen.utils.PostgreSQLEnumType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "user")
 @Data
+@Entity
+@Table(name = "user", schema = "users")
+@TypeDef(name = "pgsql_enum", typeClass = PostgreSQLEnumType.class)
 public class User implements Serializable {
     private static final long serialVersionUID = 1905122041950251207L;
 
@@ -27,8 +31,9 @@ public class User implements Serializable {
     private String password;
 
     @Column(name = "state")
+    @Type(type = "pgsql_enum")
     @Enumerated(value = EnumType.STRING)
-    private UserState state = UserState.NON_ACTIVE;
+    private UserState state = UserState.NOT_ACTIVE;
 
     @Column(name = "phone", unique = true)
     private String phone;
@@ -37,10 +42,12 @@ public class User implements Serializable {
     private String email;
 
     @Column(name = "role")
+    @Type(type = "pgsql_enum")
     @Enumerated(value = EnumType.STRING)
     private UserRole role = UserRole.MEMBER;
 
     @Column(name = "provider")
+    @Type(type = "pgsql_enum")
     @Enumerated(value = EnumType.STRING)
     private AuthProvider authProvider;
 

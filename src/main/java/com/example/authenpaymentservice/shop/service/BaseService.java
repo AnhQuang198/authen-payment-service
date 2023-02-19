@@ -24,7 +24,7 @@ public class BaseService {
         if (Objects.nonNull(user)) {
             if (user.isLocked()) {
                 throw new ResourceNotFoundException(Message.ACCOUNT_LOCKED);
-            } else if (user.getState().equals(UserState.NON_ACTIVE)) {
+            } else if (user.getState().equals(UserState.NOT_ACTIVE)) {
                 throw new ResourceNotFoundException(Message.ACCOUNT_NON_ACTIVE);
             }
             return user;

@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: ${MYSQL_CONNECT}
+    url: ${POSTGRESQL_CONNECT}
     username: ${USERNAME}
     password: ${PASSWORD}
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     topic:
@@ -53,6 +53,7 @@ jwt:
   secret-key: ${JWT_SECRET_KEY}
   token-expire-time: ${JWT_TOKEN_EXPIRE_TIME}
   refresh-expire-time: ${JWT_REFRESH_TOKEN_EXPIRE_TIME}
+  token-type: ${JWT_TOKEN_TYPE}
 otp-expire-time: ${OTP_EXPIRE_TIME}
 auth:
   authorizedRedirectUris: ${OAUTH_REDIRECT_URI}

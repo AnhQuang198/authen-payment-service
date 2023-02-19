@@ -40,10 +40,11 @@ import java.util.Objects;
 @Service
 @Log4j2
 public class AuthService extends BaseService implements UserDetailsService {
-    private static final String TOKEN_TYPE = "x-auth-token";
-
     @Value("${otp-expire-time}")
     private int otpExpireTime;
+
+    @Value("${jwt.token-type}")
+    private String jwtTokenType;
 
     public ResponseEntity<?> register(RegisterRequest request) {
         try {
@@ -52,6 +53,8 @@ public class AuthService extends BaseService implements UserDetailsService {
                 throw new BadRequestException(Message.USERNAME_EXITED);
             }
             saveUser(request);
+        } catch (BadRequestException e) {
+            throw new BadRequestException(Message.USERNAME_EXITED);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResourceNotFoundException(Message.NOT_FOUND);
@@ -72,7 +75,7 @@ public class AuthService extends BaseService implements UserDetailsService {
             String token = jwtTokenProvider.generateToken(user);
             String refreshToken = jwtTokenProvider.generateRefreshToken(user);
             cacheRefreshToken(user.getId(), refreshToken);
-            response = new LoginResponse(token, refreshToken, TOKEN_TYPE, jwtTokenProvider.getExpAt());
+            response = new LoginResponse(token, refreshToken, jwtTokenType, jwtTokenProvider.getExpAt());
         } catch (DisabledException ex) {
             throw new UnauthorizedException(Message.ACCOUNT_NON_ACTIVE);
         } catch (LockedException ex) {
@@ -90,7 +93,7 @@ public class AuthService extends BaseService implements UserDetailsService {
             if (dto.getOtpType().equals(OTPType.REGISTER.toString())) {
                 User user = userRepository.findUserByEmail(dto.getEmail());
                 if (user.getState().equals(UserState.ACTIVE)) {
-                    throw new ResourceNotFoundException(Message.ACCOUNT_ACTIVE);
+                    throw new BadRequestException(Message.ACCOUNT_ACTIVE);
                 }
                 String key = CacheKey.genMailOtp(dto.getEmail());
                 cacheUtils.set(key, otpInfo, otpExpireTime);
@@ -100,6 +103,8 @@ public class AuthService extends BaseService implements UserDetailsService {
                 cacheUtils.set(key, otpInfo, otpExpireTime);
             }
             otpProducer.sendOtp(otpInfo.getEmail(), otpInfo.getOtp());
+        } catch (BadRequestException e) {
+            throw new BadRequestException(Message.ACCOUNT_ACTIVE);
         } catch (Exception e) {
             log.error("Send OTP error: {0}", e);
             e.printStackTrace();
@@ -165,7 +170,7 @@ public class AuthService extends BaseService implements UserDetailsService {
             String refreshTokenDecode = Common.decode(refreshToken);
             int userId = Integer.parseInt(refreshTokenDecode.substring(Math.max(refreshTokenDecode.length() - 1, 0)));
             User user = userRepository.findUserById(userId);
-            if (Objects.isNull(user) || user.getState().equals(UserState.NON_ACTIVE) || user.isLocked()) {
+            if (Objects.isNull(user) || user.getState().equals(UserState.NOT_ACTIVE) || user.isLocked()) {
                 throw new ResourceNotFoundException(Message.ACCOUNT_LOCKED);
             }
 
@@ -178,7 +183,7 @@ public class AuthService extends BaseService implements UserDetailsService {
                 throw new ResourceNotFoundException(Message.NOT_FOUND);
             }
             String newAccessToken = jwtTokenProvider.generateToken(user);
-            response = new LoginResponse(newAccessToken, refreshToken, TOKEN_TYPE, jwtTokenProvider.getExpAt());
+            response = new LoginResponse(newAccessToken, refreshToken, jwtTokenType, jwtTokenProvider.getExpAt());
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResourceNotFoundException(Message.NOT_FOUND);
@@ -209,6 +214,7 @@ public class AuthService extends BaseService implements UserDetailsService {
     private void saveUser(RegisterRequest request) {
         User user = new User();
         String passwordEncrypt = encodePassword(request.getPassword());
+        user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncrypt);
         user.setAuthProvider(AuthProvider.LOCAL);

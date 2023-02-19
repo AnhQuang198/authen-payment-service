@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/users")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController extends BaseController{
+    private static final String TOKEN_TYPE = "x-auth-token";
 
     @GetMapping("/me")
     public ResponseEntity<?> getUser(
-            @RequestHeader("x-auth-token") String token
+            @RequestHeader(TOKEN_TYPE) String token
     ) {
         int userId = tokenProvider.getUserIdFromJWT(token);
         return userService.getUser(userId);
@@ -19,7 +20,7 @@ public class UserController extends BaseController{
 
     @PutMapping
     public ResponseEntity<?> updateProfile(
-            @RequestHeader("x-auth-token") String token,
+            @RequestHeader(TOKEN_TYPE) String token,
             @RequestBody UpdateProfileRequest request
             ) {
         int userId = tokenProvider.getUserIdFromJWT(token);
