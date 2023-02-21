@@ -7,6 +7,8 @@ import com.example.authenpaymentservice.shop.model.request.ShopLicenseRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping("/v1/shops")
@@ -33,7 +35,7 @@ public class ShopController extends BaseController {
     @PostMapping
     public ResponseEntity<?> createShop(
             @RequestHeader(TOKEN_TYPE) String token,
-            @RequestBody ShopCreateRequest shopCreateRequest
+            @RequestBody @Valid ShopCreateRequest shopCreateRequest
     ) {
         long userId = tokenProvider.getUserIdFromJWT(token);
         return shopService.createShop(userId, shopCreateRequest);
@@ -51,7 +53,7 @@ public class ShopController extends BaseController {
     @PostMapping("/address")
     public ResponseEntity<?> createAddress(
             @RequestHeader(TOKEN_TYPE) String token,
-            @RequestBody ShopAddressRequest request
+            @RequestBody @Valid ShopAddressRequest request
     ) {
         long shopId = tokenProvider.getUserIdFromJWT(token);
         return shopService.addressProcess(shopId, request);
@@ -60,7 +62,7 @@ public class ShopController extends BaseController {
     @PutMapping("/address")
     public ResponseEntity<?> updateAddress(
             @RequestHeader(TOKEN_TYPE) String token,
-            @RequestBody ShopAddressRequest request
+            @RequestBody @Valid ShopAddressRequest request
     ) {
         long shopId = tokenProvider.getUserIdFromJWT(token);
         return shopService.addressProcess(shopId, request);
@@ -69,7 +71,7 @@ public class ShopController extends BaseController {
     @PostMapping("/license")
     public ResponseEntity<?> addLicense(
             @RequestHeader(TOKEN_TYPE) String token,
-            @RequestBody ShopLicenseRequest request
+            @RequestBody @Valid ShopLicenseRequest request
     ) {
         long shopId = tokenProvider.getUserIdFromJWT(token);
         return shopService.addLicense(shopId, request);

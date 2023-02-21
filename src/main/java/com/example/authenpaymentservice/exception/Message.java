@@ -3,6 +3,7 @@ package com.example.authenpaymentservice.exception;
 public class Message {
     private Message(){}
     public static final String NOT_FOUND = "Có lỗi xảy ra!";
+    public static final String DATA_NOT_FOUND = "Dữ liệu không tồn tại";
     public static final String PASSWORD_INVALID = "Tài khoản hoặc mật khẩu không chính xác!";
     public static final String WRONG_FORMAT = "Sai định dạng tài khoản!";
     public static final String USERNAME_EXITED = "Email đã được đăng ký!";
@@ -19,5 +20,7 @@ public class Message {
 
     //shop message
     public static final String SHOP_EXISTED = "Shop đã tồn tại!";
+    public static final String SHOP_NOT_FOUND = "Shop không đã tồn tại!";
+    public static final String SHOP_LICENSE_INVALID = "Giấy phép cập nhật không thuộc Shop này!";
 
 }

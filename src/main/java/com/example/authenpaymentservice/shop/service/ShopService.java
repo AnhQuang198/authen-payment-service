@@ -2,11 +2,14 @@ package com.example.authenpaymentservice.shop.service;
 
 import com.example.authenpaymentservice.authen.entity.User;
 import com.example.authenpaymentservice.authen.enums.UserRole;
+import com.example.authenpaymentservice.exception.BadRequestException;
 import com.example.authenpaymentservice.exception.Message;
 import com.example.authenpaymentservice.exception.NoAccessException;
 import com.example.authenpaymentservice.exception.ResourceNotFoundException;
 import com.example.authenpaymentservice.shop.entity.Shop;
 import com.example.authenpaymentservice.shop.entity.ShopAddress;
+import com.example.authenpaymentservice.shop.entity.ShopLicense;
+import com.example.authenpaymentservice.shop.enums.ShopLicenseState;
 import com.example.authenpaymentservice.shop.enums.ShopState;
 import com.example.authenpaymentservice.shop.model.Datatable;
 import com.example.authenpaymentservice.shop.model.dtos.ShopDTO;
@@ -51,7 +54,7 @@ public class ShopService extends BaseService {
             throw new ResourceNotFoundException(Message.SHOP_EXISTED);
         }
         Shop shop = new Shop();
-        shop = CommonUtils.map(request, shop);
+        CommonUtils.map(request, shop);
         shop.setId(userId);
         shop.setState(ShopState.PENDING);
         shopRepository.saveOrUpdate(shop);
@@ -71,21 +74,38 @@ public class ShopService extends BaseService {
     }
 
     public ResponseEntity<?> addressProcess(long shopId, ShopAddressRequest request) {
-        checkShopExisted(shopId);
+        if(checkShopExisted(shopId)) {
+            throw new ResourceNotFoundException(Message.SHOP_NOT_FOUND);
+        }
         ShopAddress shopAddress = new ShopAddress();
-        if (request.getType().equalsIgnoreCase("update")) {
+        if (request.getAction().equalsIgnoreCase("update")) {
             //get current address
             shopAddress = shopAddressRepository.findByIdAndShopId(request.getId(), shopId);
         }
-        shopAddress = CommonUtils.map(request, shopAddress);
+        CommonUtils.map(request, shopAddress);
         shopAddressRepository.save(shopAddress);
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     public ResponseEntity<?> addLicense(long shopId, ShopLicenseRequest request) {
-        checkShopExisted(shopId);
-
-        return null;
+        if(checkShopExisted(shopId)) {
+            throw new ResourceNotFoundException(Message.SHOP_NOT_FOUND);
+        }
+        ShopLicense shopLicense = new ShopLicense();
+        if (request.getAction().equalsIgnoreCase("update")) {
+            //get current address
+            shopLicense = shopLicenseRepository.getEntityManager().find(ShopLicense.class, request.getId());
+            if (Objects.isNull(shopLicense)) {
+                throw new BadRequestException(Message.DATA_NOT_FOUND);
+            }
+            if (shopLicense.getShopId() != shopId) {
+                throw new BadRequestException(Message.SHOP_LICENSE_INVALID);
+            }
+        }
+        CommonUtils.map(request, shopLicense);
+        shopLicense.setState(ShopLicenseState.PENDING);
+        shopLicenseRepository.saveOrUpdate(shopLicense);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     private void updateUserRole(User user) {

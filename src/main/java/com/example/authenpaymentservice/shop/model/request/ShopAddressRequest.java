@@ -13,5 +13,5 @@ public class ShopAddressRequest {
     private Integer districtId;
 
     @NotNull
-    private String type;
+    private String action;
 }
