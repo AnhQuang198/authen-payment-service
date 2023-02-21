@@ -20,7 +20,7 @@ public class Shop implements Serializable {
     private static final long serialVersionUID = 1905122041950251207L;
 
     @Id
-    private Integer id;
+    private Long id;
 
     @Column(name = "shop_name")
     private String name;

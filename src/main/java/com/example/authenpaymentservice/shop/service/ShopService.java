@@ -25,7 +25,7 @@ import java.util.Objects;
 
 @Service
 public class ShopService extends BaseService {
-    public ResponseEntity<?> getShops(int userId, CommonRequest request) {
+    public ResponseEntity<?> getShops(long userId, CommonRequest request) {
         User user = checkUserState(userId);
         if (!user.getRole().equals(UserRole.ADMIN)) {
             throw new NoAccessException(Message.NO_ACCESS_RESOURCE);
@@ -43,7 +43,7 @@ public class ShopService extends BaseService {
     }
 
     @Transactional
-    public ResponseEntity<?> createShop(int userId, ShopCreateRequest request) {
+    public ResponseEntity<?> createShop(long userId, ShopCreateRequest request) {
         User user = checkUserState(userId);
         if (checkShopExisted(userId)) {
             throw new ResourceNotFoundException(Message.SHOP_EXISTED);
@@ -60,7 +60,7 @@ public class ShopService extends BaseService {
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    public ResponseEntity<?> approveShop(int userId, int shopId) {
+    public ResponseEntity<?> approveShop(long userId, long shopId) {
         User user = checkUserState(userId);
         if (!user.getRole().equals(UserRole.ADMIN)) {
             throw new NoAccessException(Message.NO_ACCESS_RESOURCE);
@@ -71,7 +71,7 @@ public class ShopService extends BaseService {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    public ResponseEntity<?> addressProcess(int shopId, ShopAddressRequest request) {
+    public ResponseEntity<?> addressProcess(long shopId, ShopAddressRequest request) {
         checkShopExisted(shopId);
         ShopAddress shopAddress = new ShopAddress();
         if (request.getType().equalsIgnoreCase("update")) {

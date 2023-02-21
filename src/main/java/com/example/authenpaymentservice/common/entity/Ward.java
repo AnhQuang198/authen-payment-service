@@ -1,4 +1,4 @@
-package com.example.authenpaymentservice.shop.entity;
+package com.example.authenpaymentservice.common.entity;
 
 import lombok.Data;
 

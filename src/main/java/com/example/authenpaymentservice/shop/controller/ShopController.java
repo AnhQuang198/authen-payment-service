@@ -24,7 +24,7 @@ public class ShopController extends BaseController{
             @RequestHeader(TOKEN_TYPE) String token,
             @RequestBody CommonRequest request
             ) {
-        int userId = tokenProvider.getUserIdFromJWT(token);
+        long userId = tokenProvider.getUserIdFromJWT(token);
         return shopService.getShops(userId, request);
     }
 
@@ -33,7 +33,7 @@ public class ShopController extends BaseController{
             @RequestHeader(TOKEN_TYPE) String token,
             @RequestBody ShopCreateRequest shopCreateRequest
             ) {
-        int userId = tokenProvider.getUserIdFromJWT(token);
+        long userId = tokenProvider.getUserIdFromJWT(token);
         return shopService.createShop(userId, shopCreateRequest);
     }
 
@@ -42,7 +42,7 @@ public class ShopController extends BaseController{
             @RequestHeader(TOKEN_TYPE) String token,
             @PathVariable("shopId") Integer shopId
     ) {
-        int userId = tokenProvider.getUserIdFromJWT(token);
+        long userId = tokenProvider.getUserIdFromJWT(token);
         return shopService.approveShop(userId, shopId);
     }
 
@@ -51,7 +51,7 @@ public class ShopController extends BaseController{
             @RequestHeader(TOKEN_TYPE) String token,
             @RequestBody ShopAddressRequest request
     ) {
-        int shopId = tokenProvider.getUserIdFromJWT(token);
+        long shopId = tokenProvider.getUserIdFromJWT(token);
         return shopService.addressProcess(shopId, request);
     }
 
@@ -60,7 +60,7 @@ public class ShopController extends BaseController{
             @RequestHeader(TOKEN_TYPE) String token,
             @RequestBody ShopAddressRequest request
     ) {
-        int shopId = tokenProvider.getUserIdFromJWT(token);
+        long shopId = tokenProvider.getUserIdFromJWT(token);
         return shopService.addressProcess(shopId, request);
     }
 }

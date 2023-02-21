@@ -12,7 +12,7 @@ import java.util.Objects;
 @Service
 public class UserService extends BaseService{
 
-    public ResponseEntity<?> getUser(Integer userId) {
+    public ResponseEntity<?> getUser(Long userId) {
         User user = new User();
         if (Objects.nonNull(userId)) {
             user = userRepository.findUserById(userId);
@@ -20,7 +20,7 @@ public class UserService extends BaseService{
         return ResponseEntity.ok(user);
     }
 
-    public ResponseEntity<?> updateProfile(UpdateProfileRequest request, Integer userId) {
+    public ResponseEntity<?> updateProfile(UpdateProfileRequest request, Long userId) {
         User user = userRepository.findUserById(userId);
         if (Objects.isNull(user)) {
             throw new ResourceNotFoundException(Message.NOT_FOUND);
