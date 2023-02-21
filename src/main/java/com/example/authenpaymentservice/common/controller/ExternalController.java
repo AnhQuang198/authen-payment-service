@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/commons")
-public class CommonController extends BaseController{
+@RequestMapping("/v1/public")
+public class ExternalController extends BaseController{
     @GetMapping("/cities")
     public ResponseEntity<?> getCities() {
         return externalService.getCities();

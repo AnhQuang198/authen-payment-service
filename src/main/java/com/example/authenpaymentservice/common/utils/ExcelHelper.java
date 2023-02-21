@@ -1,6 +1,6 @@
-package com.example.authenpaymentservice.upload.utils;
+package com.example.authenpaymentservice.common.utils;
 
-import com.example.authenpaymentservice.upload.model.Tutorial;
+import com.example.authenpaymentservice.common.model.Tutorial;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
