@@ -13,8 +13,10 @@ import com.example.authenpaymentservice.shop.model.dtos.ShopDTO;
 import com.example.authenpaymentservice.shop.model.request.CommonRequest;
 import com.example.authenpaymentservice.shop.model.request.ShopAddressRequest;
 import com.example.authenpaymentservice.shop.model.request.ShopCreateRequest;
+import com.example.authenpaymentservice.shop.model.request.ShopLicenseRequest;
 import com.example.authenpaymentservice.shop.model.response.ShopResponse;
 import com.example.authenpaymentservice.shop.model.response.data.Metadata;
+import com.example.authenpaymentservice.shop.utils.CommonUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -49,11 +51,8 @@ public class ShopService extends BaseService {
             throw new ResourceNotFoundException(Message.SHOP_EXISTED);
         }
         Shop shop = new Shop();
+        shop = CommonUtils.map(request, shop);
         shop.setId(userId);
-        shop.setName(request.getName());
-        shop.setCoverUrl(request.getCoverUrl());
-        shop.setAvatarUrl(request.getAvatarUrl());
-        shop.setDescription(request.getDescription());
         shop.setState(ShopState.PENDING);
         shopRepository.saveOrUpdate(shop);
         updateUserRole(user);
@@ -78,13 +77,15 @@ public class ShopService extends BaseService {
             //get current address
             shopAddress = shopAddressRepository.findByIdAndShopId(request.getId(), shopId);
         }
-        shopAddress.setShopId(shopId);
-        shopAddress.setCityId(request.getCityId());
-        shopAddress.setDistrictId(request.getDistrictId());
-        shopAddress.setWardId(request.getWardId());
-        shopAddress.setAddDetail(request.getAddDetail());
+        shopAddress = CommonUtils.map(request, shopAddress);
         shopAddressRepository.save(shopAddress);
         return ResponseEntity.ok(HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<?> addLicense(long shopId, ShopLicenseRequest request) {
+        checkShopExisted(shopId);
+
+        return null;
     }
 
     private void updateUserRole(User user) {

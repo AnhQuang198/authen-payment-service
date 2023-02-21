@@ -7,6 +7,7 @@ import com.example.authenpaymentservice.exception.Message;
 import com.example.authenpaymentservice.exception.ResourceNotFoundException;
 import com.example.authenpaymentservice.shop.entity.Shop;
 import com.example.authenpaymentservice.shop.repository.ShopAddressRepository;
+import com.example.authenpaymentservice.shop.repository.ShopLicenseRepository;
 import com.example.authenpaymentservice.shop.repository.ShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,6 +17,7 @@ public class BaseService {
     @Autowired protected ShopRepository shopRepository;
     @Autowired protected UserRepository userRepository;
     @Autowired protected ShopAddressRepository shopAddressRepository;
+    @Autowired protected ShopLicenseRepository shopLicenseRepository;
 
     protected User checkUserState(long userId) {
         User user = userRepository.findUserById(userId);
