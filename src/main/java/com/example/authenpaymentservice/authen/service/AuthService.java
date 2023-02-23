@@ -33,6 +33,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -225,6 +226,7 @@ public class AuthService extends BaseService implements UserDetailsService {
     private void updateStatusUser(String email) {
         User user = userRepository.findUserByEmail(email);
         user.setState(UserState.ACTIVE);
+        user.setConfirmedAt(new Timestamp(System.currentTimeMillis()));
         userRepository.saveAndFlush(user);
     }
 

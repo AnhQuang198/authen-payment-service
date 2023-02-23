@@ -13,10 +13,7 @@ import com.example.authenpaymentservice.shop.enums.ShopLicenseState;
 import com.example.authenpaymentservice.shop.enums.ShopState;
 import com.example.authenpaymentservice.shop.model.Datatable;
 import com.example.authenpaymentservice.shop.model.dtos.ShopDTO;
-import com.example.authenpaymentservice.shop.model.request.CommonRequest;
-import com.example.authenpaymentservice.shop.model.request.ShopAddressRequest;
-import com.example.authenpaymentservice.shop.model.request.ShopCreateRequest;
-import com.example.authenpaymentservice.shop.model.request.ShopLicenseRequest;
+import com.example.authenpaymentservice.shop.model.request.*;
 import com.example.authenpaymentservice.shop.model.response.ShopResponse;
 import com.example.authenpaymentservice.shop.model.response.data.Metadata;
 import com.example.authenpaymentservice.shop.utils.CommonUtils;
@@ -25,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,8 +40,14 @@ public class ShopService extends BaseService {
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity<?> getShop(int shopId) {
+    public ResponseEntity<?> getShop(long userId, long shopId) {
+        if (userId != shopId) {
+            throw new BadRequestException(Message.NO_ACCESS_RESOURCE);
+        }
         Shop shop = shopRepository.getEntityManager().find(Shop.class, shopId);
+        if (Objects.isNull(shop)) {
+            throw new BadRequestException(Message.DATA_NOT_FOUND);
+        }
         return ResponseEntity.ok(shop);
     }
 
@@ -69,12 +73,13 @@ public class ShopService extends BaseService {
         }
         Shop shop = shopRepository.getEntityManager().find(Shop.class, shopId);
         shop.setState(ShopState.APPROVED);
+        shop.setConfirmedAt(new Timestamp(System.currentTimeMillis()));
         shopRepository.saveOrUpdate(shop);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     public ResponseEntity<?> addressProcess(long shopId, ShopAddressRequest request) {
-        if(checkShopExisted(shopId)) {
+        if (checkShopExisted(shopId)) {
             throw new ResourceNotFoundException(Message.SHOP_NOT_FOUND);
         }
         ShopAddress shopAddress = new ShopAddress();
@@ -88,13 +93,13 @@ public class ShopService extends BaseService {
     }
 
     public ResponseEntity<?> addLicense(long shopId, ShopLicenseRequest request) {
-        if(checkShopExisted(shopId)) {
+        if (checkShopExisted(shopId)) {
             throw new ResourceNotFoundException(Message.SHOP_NOT_FOUND);
         }
         ShopLicense shopLicense = new ShopLicense();
         if (request.getAction().equalsIgnoreCase("update")) {
-            //get current address
-            shopLicense = shopLicenseRepository.getEntityManager().find(ShopLicense.class, request.getId());
+            //get current license
+            shopLicense = shopLicenseRepository.getEntityManager().find(ShopLicense.class, request.getLicenseId());
             if (Objects.isNull(shopLicense)) {
                 throw new BadRequestException(Message.DATA_NOT_FOUND);
             }
@@ -106,6 +111,22 @@ public class ShopService extends BaseService {
         shopLicense.setState(ShopLicenseState.PENDING);
         shopLicenseRepository.saveOrUpdate(shopLicense);
         return ResponseEntity.ok(HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<?> approveLicense(long userId, ShopLicenseApproveRequest request) {
+        User user = checkUserState(userId);
+        if (!user.getRole().equals(UserRole.ADMIN)) {
+            throw new NoAccessException(Message.NO_ACCESS_RESOURCE);
+        }
+        ShopLicense shopLicense = shopLicenseRepository.getEntityManager().find(ShopLicense.class, request.getLicenseId());
+        if (Objects.isNull(shopLicense)) {
+            throw new BadRequestException(Message.DATA_NOT_FOUND);
+        }
+        ShopLicenseState state = ShopLicenseState.APPROVED.toString().equals(request.getState()) ? ShopLicenseState.APPROVED : ShopLicenseState.REJECTED;
+        shopLicense.setState(state);
+        shopLicense.setRejectReason(request.getRejectReason());
+        shopLicenseRepository.saveOrUpdate(shopLicense);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     private void updateUserRole(User user) {

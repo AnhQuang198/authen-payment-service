@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -28,6 +29,9 @@ public class Shop implements Serializable {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
+    @Column(name = "category_id")
+    private Integer categoryId;
+
     @Column(name = "cover_url")
     private String coverUrl;
 
@@ -42,11 +46,14 @@ public class Shop implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private ShopState state;
 
+    @Column(name = "confirmed_at")
+    private Timestamp confirmedAt;
+
     @Column(name = "created_at")
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private Timestamp updatedAt;
 }

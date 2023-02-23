@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class ShopLicenseRequest {
-    private Long id;
+    private Long licenseId;
     @NotNull
     private Long shopId;
     private String frontIdentityCardUrl;
@@ -17,8 +17,6 @@ public class ShopLicenseRequest {
     private String businessLicenseUrl;
     private String taxCode;
     private String companyName;
-//    private String state;
-//    private String rejectReason;
     @NotNull
     private String action;
 }

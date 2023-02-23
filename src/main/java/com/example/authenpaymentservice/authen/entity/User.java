@@ -13,6 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -67,7 +68,7 @@ public class User implements Serializable {
     private String avatarUrl;
 
     @Column(name = "confirmed_at")
-    private LocalDateTime confirmedAt;
+    private Timestamp confirmedAt;
 
     @Column(name = "created_at")
     @CreationTimestamp

@@ -12,6 +12,9 @@ public class ShopCreateRequest {
     private String name;
 
     @NotNull
+    private Integer categoryId;
+
+    @NotNull
     private String avatarUrl;
 
     @NotNull

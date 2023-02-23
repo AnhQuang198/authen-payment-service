@@ -1,9 +1,6 @@
 package com.example.authenpaymentservice.shop.controller;
 
-import com.example.authenpaymentservice.shop.model.request.CommonRequest;
-import com.example.authenpaymentservice.shop.model.request.ShopAddressRequest;
-import com.example.authenpaymentservice.shop.model.request.ShopCreateRequest;
-import com.example.authenpaymentservice.shop.model.request.ShopLicenseRequest;
+import com.example.authenpaymentservice.shop.model.request.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +15,10 @@ public class ShopController extends BaseController {
     @GetMapping("{shopId}")
     public ResponseEntity<?> getShop(
             @RequestHeader(TOKEN_TYPE) String token,
-            @PathVariable Integer shopId
+            @PathVariable Long shopId
     ) {
-        return shopService.getShop(shopId);
+        long userId = tokenProvider.getUserIdFromJWT(token);
+        return shopService.getShop(userId, shopId);
     }
 
     @GetMapping
@@ -44,7 +42,7 @@ public class ShopController extends BaseController {
     @PutMapping("/approve/{shopId}")
     public ResponseEntity<?> approveShop(
             @RequestHeader(TOKEN_TYPE) String token,
-            @PathVariable("shopId") Integer shopId
+            @PathVariable("shopId") Long shopId
     ) {
         long userId = tokenProvider.getUserIdFromJWT(token);
         return shopService.approveShop(userId, shopId);
@@ -59,15 +57,6 @@ public class ShopController extends BaseController {
         return shopService.addressProcess(shopId, request);
     }
 
-    @PutMapping("/address")
-    public ResponseEntity<?> updateAddress(
-            @RequestHeader(TOKEN_TYPE) String token,
-            @RequestBody @Valid ShopAddressRequest request
-    ) {
-        long shopId = tokenProvider.getUserIdFromJWT(token);
-        return shopService.addressProcess(shopId, request);
-    }
-
     @PostMapping("/license")
     public ResponseEntity<?> addLicense(
             @RequestHeader(TOKEN_TYPE) String token,
@@ -75,5 +64,14 @@ public class ShopController extends BaseController {
     ) {
         long shopId = tokenProvider.getUserIdFromJWT(token);
         return shopService.addLicense(shopId, request);
+    }
+
+    @PutMapping("/license/approve")
+    public ResponseEntity<?> approveLicense(
+            @RequestHeader(TOKEN_TYPE) String token,
+            @RequestBody @Valid ShopLicenseApproveRequest request
+    ) {
+        long userId = tokenProvider.getUserIdFromJWT(token);
+        return shopService.approveLicense(userId, request);
     }
 }
