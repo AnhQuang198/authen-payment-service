@@ -45,7 +45,7 @@ public class JwtTokenProvider {
         return doGenerateRefreshToken(user.getId(), user.getRole().toString());
     }
 
-    private String doGenerateRefreshToken(int userId, String userRole) {
+    private String doGenerateRefreshToken(long userId, String userRole) {
         String refreshToken = String.format("%s-%s-%s", UUID.randomUUID(), userRole, userId);
         return Common.encode(refreshToken);
     }
@@ -59,7 +59,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
-    public int getUserIdFromJWT(String token) {
+    public long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)

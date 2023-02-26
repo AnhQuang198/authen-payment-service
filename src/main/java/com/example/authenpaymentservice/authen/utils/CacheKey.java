@@ -6,7 +6,7 @@ import lombok.Data;
 public class CacheKey {
     private static String prefix = "demo";
 
-    public static String genRefreshToken(int userId) {
+    public static String genRefreshToken(long userId) {
         return prefix + ":refreshToken:" + userId;
     }
 
@@ -14,7 +14,7 @@ public class CacheKey {
         return prefix + ":registerOtp:" + email;
     }
 
-    public static String genForgotPasswordOtp(String username, int id){
+    public static String genForgotPasswordOtp(String username, long id){
         return prefix + ":forgotPassOtp:" + username + ":" + id;
     }
 }

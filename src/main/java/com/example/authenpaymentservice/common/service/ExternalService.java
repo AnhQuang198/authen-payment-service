@@ -1,8 +1,8 @@
-package com.example.authenpaymentservice.shop.service;
+package com.example.authenpaymentservice.common.service;
 
-import com.example.authenpaymentservice.shop.entity.City;
-import com.example.authenpaymentservice.shop.entity.District;
-import com.example.authenpaymentservice.shop.entity.Ward;
+import com.example.authenpaymentservice.common.entity.City;
+import com.example.authenpaymentservice.common.entity.District;
+import com.example.authenpaymentservice.common.entity.Ward;
 import com.example.authenpaymentservice.shop.model.response.ObjectResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ExternalService extends BaseService{
+public class ExternalService extends BaseService {
 
     public ResponseEntity<?> getCities() {
         List<City> cities = cityRepository.findAll();

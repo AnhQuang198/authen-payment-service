@@ -1,4 +1,4 @@
-package com.example.authenpaymentservice.upload.model;
+package com.example.authenpaymentservice.common.model;
 
 import lombok.Data;
 

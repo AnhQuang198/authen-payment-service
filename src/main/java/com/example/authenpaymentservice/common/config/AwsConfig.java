@@ -1,4 +1,4 @@
-package com.example.authenpaymentservice.upload.config;
+package com.example.authenpaymentservice.common.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

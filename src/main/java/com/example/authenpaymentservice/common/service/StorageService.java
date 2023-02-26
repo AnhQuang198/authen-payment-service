@@ -1,10 +1,10 @@
-package com.example.authenpaymentservice.upload.service;
+package com.example.authenpaymentservice.common.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.authenpaymentservice.exception.Message;
 import com.example.authenpaymentservice.exception.ResourceNotFoundException;
-import com.example.authenpaymentservice.upload.model.UploadResponse;
+import com.example.authenpaymentservice.common.model.UploadResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

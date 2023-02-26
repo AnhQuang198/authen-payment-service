@@ -1,7 +1,7 @@
-package com.example.authenpaymentservice.upload.service;
+package com.example.authenpaymentservice.common.service;
 
-import com.example.authenpaymentservice.upload.model.Tutorial;
-import com.example.authenpaymentservice.upload.utils.ExcelHelper;
+import com.example.authenpaymentservice.common.model.Tutorial;
+import com.example.authenpaymentservice.common.utils.ExcelHelper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

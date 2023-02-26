@@ -1,4 +1,4 @@
-package com.example.authenpaymentservice.shop.controller;
+package com.example.authenpaymentservice.common.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/public")
 public class ExternalController extends BaseController{
-
     @GetMapping("/cities")
     public ResponseEntity<?> getCities() {
         return externalService.getCities();

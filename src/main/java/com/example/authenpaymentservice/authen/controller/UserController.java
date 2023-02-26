@@ -14,7 +14,7 @@ public class UserController extends BaseController{
     public ResponseEntity<?> getUser(
             @RequestHeader(TOKEN_TYPE) String token
     ) {
-        int userId = tokenProvider.getUserIdFromJWT(token);
+        long userId = tokenProvider.getUserIdFromJWT(token);
         return userService.getUser(userId);
     }
 
@@ -23,7 +23,7 @@ public class UserController extends BaseController{
             @RequestHeader(TOKEN_TYPE) String token,
             @RequestBody UpdateProfileRequest request
             ) {
-        int userId = tokenProvider.getUserIdFromJWT(token);
+        long userId = tokenProvider.getUserIdFromJWT(token);
         return userService.updateProfile(request, userId);
     }
 

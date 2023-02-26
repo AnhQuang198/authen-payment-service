@@ -1,66 +1,77 @@
 package com.example.authenpaymentservice.shop.controller;
 
-import com.example.authenpaymentservice.shop.model.request.CommonRequest;
-import com.example.authenpaymentservice.shop.model.request.ShopAddressRequest;
-import com.example.authenpaymentservice.shop.model.request.ShopCreateRequest;
+import com.example.authenpaymentservice.shop.model.request.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 
 @RestController
 @RequestMapping("/v1/shops")
-public class ShopController extends BaseController{
+public class ShopController extends BaseController {
     private static final String TOKEN_TYPE = "x-auth-token";
+
     @GetMapping("{shopId}")
     public ResponseEntity<?> getShop(
             @RequestHeader(TOKEN_TYPE) String token,
-            @PathVariable Integer shopId
+            @PathVariable Long shopId
     ) {
-        return shopService.getShop(shopId);
+        long userId = tokenProvider.getUserIdFromJWT(token);
+        return shopService.getShop(userId, shopId);
     }
 
     @GetMapping
     public ResponseEntity<?> getShops(
             @RequestHeader(TOKEN_TYPE) String token,
             @RequestBody CommonRequest request
-            ) {
-        int userId = tokenProvider.getUserIdFromJWT(token);
+    ) {
+        long userId = tokenProvider.getUserIdFromJWT(token);
         return shopService.getShops(userId, request);
     }
 
     @PostMapping
     public ResponseEntity<?> createShop(
             @RequestHeader(TOKEN_TYPE) String token,
-            @RequestBody ShopCreateRequest shopCreateRequest
-            ) {
-        int userId = tokenProvider.getUserIdFromJWT(token);
+            @RequestBody @Valid ShopCreateRequest shopCreateRequest
+    ) {
+        long userId = tokenProvider.getUserIdFromJWT(token);
         return shopService.createShop(userId, shopCreateRequest);
     }
 
     @PutMapping("/approve/{shopId}")
     public ResponseEntity<?> approveShop(
             @RequestHeader(TOKEN_TYPE) String token,
-            @PathVariable("shopId") Integer shopId
+            @PathVariable("shopId") Long shopId
     ) {
-        int userId = tokenProvider.getUserIdFromJWT(token);
+        long userId = tokenProvider.getUserIdFromJWT(token);
         return shopService.approveShop(userId, shopId);
     }
 
     @PostMapping("/address")
     public ResponseEntity<?> createAddress(
             @RequestHeader(TOKEN_TYPE) String token,
-            @RequestBody ShopAddressRequest request
+            @RequestBody @Valid ShopAddressRequest request
     ) {
-        int shopId = tokenProvider.getUserIdFromJWT(token);
+        long shopId = tokenProvider.getUserIdFromJWT(token);
         return shopService.addressProcess(shopId, request);
     }
 
-    @PutMapping("/address")
-    public ResponseEntity<?> updateAddress(
+    @PostMapping("/license")
+    public ResponseEntity<?> addLicense(
             @RequestHeader(TOKEN_TYPE) String token,
-            @RequestBody ShopAddressRequest request
+            @RequestBody @Valid ShopLicenseRequest request
     ) {
-        int shopId = tokenProvider.getUserIdFromJWT(token);
-        return shopService.addressProcess(shopId, request);
+        long shopId = tokenProvider.getUserIdFromJWT(token);
+        return shopService.addLicense(shopId, request);
+    }
+
+    @PutMapping("/license/approve")
+    public ResponseEntity<?> approveLicense(
+            @RequestHeader(TOKEN_TYPE) String token,
+            @RequestBody @Valid ShopLicenseApproveRequest request
+    ) {
+        long userId = tokenProvider.getUserIdFromJWT(token);
+        return shopService.approveLicense(userId, request);
     }
 }
