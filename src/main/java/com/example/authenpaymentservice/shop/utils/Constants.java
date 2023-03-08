@@ -29,4 +29,16 @@ public class Constants {
         String ERROR_UPDATE = "ERROR_UPDATE";
         String FILE_INVALID_FORM = "FILE_INVALID_FORM";
     }
+
+    public enum ACTION {
+        CREATE("create"),
+        UPDATE("update");
+        private String value;
+        ACTION (String value) {
+            this.value = value;
+        }
+        public String getValue() {
+            return value;
+        }
+    }
 }

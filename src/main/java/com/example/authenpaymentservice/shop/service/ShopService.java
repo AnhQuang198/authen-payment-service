@@ -17,6 +17,7 @@ import com.example.authenpaymentservice.shop.model.request.*;
 import com.example.authenpaymentservice.shop.model.response.ShopResponse;
 import com.example.authenpaymentservice.shop.model.response.data.Metadata;
 import com.example.authenpaymentservice.shop.utils.CommonUtils;
+import com.example.authenpaymentservice.shop.utils.Constants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -78,12 +79,31 @@ public class ShopService extends BaseService {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    public ResponseEntity<?> lockShop(long userId, long shopId) {
+        User user = checkUserState(userId);
+        if (checkShopExisted(shopId)) {
+            throw new ResourceNotFoundException(Message.SHOP_NOT_FOUND);
+        }
+        Shop shop = shopRepository.getEntityManager().find(Shop.class, shopId);
+        if (userId != shopId) {
+            if (!user.getRole().equals(UserRole.ADMIN)) {
+                throw new NoAccessException(Message.NO_ACCESS_RESOURCE);
+            }
+            shop.setLocked(true);
+            shop.setState(ShopState.BANED);
+        } else {
+            shop.setLocked(true);
+        }
+        shopRepository.saveOrUpdate(shop);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
     public ResponseEntity<?> addressProcess(long shopId, ShopAddressRequest request) {
         if (checkShopExisted(shopId)) {
             throw new ResourceNotFoundException(Message.SHOP_NOT_FOUND);
         }
         ShopAddress shopAddress = new ShopAddress();
-        if (request.getAction().equalsIgnoreCase("update")) {
+        if (request.getAction().equalsIgnoreCase(Constants.ACTION.UPDATE.getValue())) {
             //get current address
             shopAddress = shopAddressRepository.findByIdAndShopId(request.getId(), shopId);
         }
@@ -97,7 +117,7 @@ public class ShopService extends BaseService {
             throw new ResourceNotFoundException(Message.SHOP_NOT_FOUND);
         }
         ShopLicense shopLicense = new ShopLicense();
-        if (request.getAction().equalsIgnoreCase("update")) {
+        if (request.getAction().equalsIgnoreCase(Constants.ACTION.UPDATE.getValue())) {
             //get current license
             shopLicense = shopLicenseRepository.getEntityManager().find(ShopLicense.class, request.getLicenseId());
             if (Objects.isNull(shopLicense)) {
