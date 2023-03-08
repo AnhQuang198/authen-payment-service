@@ -73,6 +73,9 @@ public class ShopService extends BaseService {
             throw new NoAccessException(Message.NO_ACCESS_RESOURCE);
         }
         Shop shop = shopRepository.getEntityManager().find(Shop.class, shopId);
+        if (Objects.isNull(shop)) {
+            throw new ResourceNotFoundException(Message.SHOP_NOT_FOUND);
+        }
         shop.setState(ShopState.APPROVED);
         shop.setConfirmedAt(new Timestamp(System.currentTimeMillis()));
         shopRepository.saveOrUpdate(shop);
