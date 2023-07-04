@@ -4,6 +4,12 @@ public class Constants {
     public static final String TYPE_NUMBER = "LONG,INTEGER,SHORT,BYTE,INT,DOUBLE,FLOAT";
     public static final String TYPE_DATE = "DATE";
 
+    public interface ACTION {
+        String ADD = "ADD";
+        String UPDATE = "UPDATE";
+
+    }
+
     public interface RESULT {
 
         String EXIST = "EXIST";

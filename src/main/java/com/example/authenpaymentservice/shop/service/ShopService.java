@@ -17,6 +17,7 @@ import com.example.authenpaymentservice.shop.model.request.*;
 import com.example.authenpaymentservice.shop.model.response.ShopResponse;
 import com.example.authenpaymentservice.shop.model.response.data.Metadata;
 import com.example.authenpaymentservice.shop.utils.CommonUtils;
+import com.example.authenpaymentservice.shop.utils.Constants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -83,7 +84,7 @@ public class ShopService extends BaseService {
             throw new ResourceNotFoundException(Message.SHOP_NOT_FOUND);
         }
         ShopAddress shopAddress = new ShopAddress();
-        if (request.getAction().equalsIgnoreCase("update")) {
+        if (request.getAction().equalsIgnoreCase(Constants.ACTION.UPDATE)) {
             //get current address
             shopAddress = shopAddressRepository.findByIdAndShopId(request.getId(), shopId);
         }
@@ -97,7 +98,7 @@ public class ShopService extends BaseService {
             throw new ResourceNotFoundException(Message.SHOP_NOT_FOUND);
         }
         ShopLicense shopLicense = new ShopLicense();
-        if (request.getAction().equalsIgnoreCase("update")) {
+        if (request.getAction().equalsIgnoreCase(Constants.ACTION.UPDATE)) {
             //get current license
             shopLicense = shopLicenseRepository.getEntityManager().find(ShopLicense.class, request.getLicenseId());
             if (Objects.isNull(shopLicense)) {
