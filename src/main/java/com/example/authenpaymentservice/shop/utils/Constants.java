@@ -31,8 +31,8 @@ public class Constants {
     }
 
     public enum ACTION {
-        CREATE("create"),
-        UPDATE("update");
+        CREATE("CREATE"),
+        UPDATE("UPDATE");
         private String value;
         ACTION (String value) {
             this.value = value;
