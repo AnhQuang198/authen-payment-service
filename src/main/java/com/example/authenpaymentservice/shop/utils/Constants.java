@@ -4,12 +4,6 @@ public class Constants {
     public static final String TYPE_NUMBER = "LONG,INTEGER,SHORT,BYTE,INT,DOUBLE,FLOAT";
     public static final String TYPE_DATE = "DATE";
 
-    public interface ACTION {
-        String ADD = "ADD";
-        String UPDATE = "UPDATE";
-
-    }
-
     public interface RESULT {
 
         String EXIST = "EXIST";
@@ -34,5 +28,17 @@ public class Constants {
         String DELETE_REQUIRE_EXIST = "DELETE_REQUIRE_EXIST";
         String ERROR_UPDATE = "ERROR_UPDATE";
         String FILE_INVALID_FORM = "FILE_INVALID_FORM";
+    }
+
+    public enum ACTION {
+        CREATE("create"),
+        UPDATE("update");
+        private String value;
+        ACTION (String value) {
+            this.value = value;
+        }
+        public String getValue() {
+            return value;
+        }
     }
 }

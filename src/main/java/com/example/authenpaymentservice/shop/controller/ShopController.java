@@ -48,6 +48,15 @@ public class ShopController extends BaseController {
         return shopService.approveShop(userId, shopId);
     }
 
+    @PutMapping("/lock/{shopId}")
+    public ResponseEntity<?> lockShop(
+            @RequestHeader(TOKEN_TYPE) String token,
+            @PathVariable("shopId") Long shopId
+    ) {
+        long userId = tokenProvider.getUserIdFromJWT(token);
+        return shopService.lockShop(userId, shopId);
+    }
+
     @PostMapping("/address")
     public ResponseEntity<?> createAddress(
             @RequestHeader(TOKEN_TYPE) String token,
