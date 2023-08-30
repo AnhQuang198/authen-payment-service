@@ -42,9 +42,7 @@ public class SQLBuilder {
             log.info("SQL file path:" + filePath);
             Resource resource = new ClassPathResource(filePath);
             inputStream = resource.getInputStream();
-            if (inputStream != null) {
-                return new String(String.valueOf(inputStream.read()));
-            }
+            return new String(String.valueOf(inputStream.read()));
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             return null;
@@ -57,6 +55,5 @@ public class SQLBuilder {
                 }
             }
         }
-        return null;
     }
 }
